@@ -47,7 +47,7 @@ const WORK_ITEMS = [
         subtitle: "Less searching. More discovering. A complet UX rethink of the world's most iconic football database.",
         buttonText: "View project",
         bgImage: "https://app.paper.design/file-assets/01KY4X3C4M5YQAKN37W0653780/01KYS4DH7C1CD9HGJ0DKS2F0MH.png",
-        videoUrl: "./assets/transfermarkt_video.mp4",
+        videoUrl: "/assets/transfermarkt_video.mp4",
         boxShadow: "0px 30px 40px rgba(0, 109, 241, 0.74) inset, 3px 10px 20px rgba(255, 255, 255, 0.5)",
         description: "Less searching. More discovering. A complet UX rethink of the world's most iconic football database.",
     },
@@ -59,7 +59,7 @@ const WORK_ITEMS = [
         subtitle: "A meditation app designed to bring you back to your breath, instantly and effortlessly.",
         buttonText: "View project",
         bgImage: "https://app.paper.design/file-assets/01KY4X3C4M5YQAKN37W0653780/01KYS47TEGFNZK9063DKBT6JFE.png",
-        videoUrl: "./assets/breathe_video.mp4",
+        videoUrl: "/assets/breathe_video.mp4",
         boxShadow: "0px 30px 40px rgba(124, 14, 144, 0.3) inset, 3px 10px 20px rgba(255, 255, 255, 0.5)",
         introText: "A calm digital sanctuary, designed for a world that rarely slows down. Breathe invites people to pause, even just for a moment, and reconnect with themselves — one breath at a time.",
         description: "A calm digital sanctuary, designed for a world that rarely slows down. Breathe invites people to pause, even just for a moment, and reconnect with themselves — one breath at a time.",
@@ -72,7 +72,7 @@ const WORK_ITEMS = [
         subtitle: "A fun and interactive website that lets you discover and explore written content in unique and creative ways.",
         buttonText: "View project",
         bgImage: "https://app.paper.design/file-assets/01KY4X3C4M5YQAKN37W0653780/01KYS4JPHK95SB2XYA5ZHH97PW.png",
-        videoUrl: "./assets/reveal_video.mp4",
+        videoUrl: "/assets/reveal_video.mp4",
         boxShadow: "3px 10px 20px rgba(255, 255, 255, 0.5)",
         introText: "After presenting more structured case studies, I wanted to include something different, something that reflects another side of digital design that I deeply enjoy: creativity, experimentation, and play.\n\nThis project transforms the way users discover content. Instead of simply reading through a page, users reveal information by moving a candle across the screen, creating a more interactive and engaging experience. It explores how small, unexpected interactions can strengthen the connection between people and digital products, turning navigation into discovery.\n\nFor me, great design is not only about solving problems, it’s also about daring to create memorable experiences.",
         liveUrl: "https://adventurous-app-059676.framer.app",
@@ -987,7 +987,7 @@ function ProjectOverlayFrame({ project, onClose }) {
                         </h3>
                         {(isTransfermarkt || isBreathe) && (
                             <a
-                                href={isTransfermarkt ? "./assets/transfermarkt_case_study_paper.png" : "./assets/breathe_case_study_paper.png"}
+                                href={isTransfermarkt ? "/assets/transfermarkt_case_study_paper.png" : "/assets/breathe_case_study_paper.png"}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="case-study-full-res-link"
@@ -1001,7 +1001,7 @@ function ProjectOverlayFrame({ project, onClose }) {
                             {[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14].map((idx) => (
                                 <img
                                     key={idx}
-                                    src={`./assets/slices/transfermarkt_${idx}.png`}
+                                    src={`/assets/slices/transfermarkt_${idx}.png`}
                                     alt={`Transfermarkt Case Study Part ${idx + 1}`}
                                     className="case-study-paper-img"
                                     loading="lazy"
@@ -1013,7 +1013,7 @@ function ProjectOverlayFrame({ project, onClose }) {
                             {[0,1,2,3,4,5,6,7,8,9].map((idx) => (
                                 <img
                                     key={idx}
-                                    src={`./assets/slices/breathe_${idx}.png`}
+                                    src={`/assets/slices/breathe_${idx}.png`}
                                     alt={`Breathe Case Study Part ${idx + 1}`}
                                     className="case-study-paper-img"
                                     loading="lazy"
@@ -1083,7 +1083,7 @@ export default function App() {
 
     useEffect(() => {
         if (typeof window !== "undefined") {
-            const audio = new Audio("./assets/the_mountain-piano-documentary-567436.mp3");
+            const audio = new Audio("/assets/the_mountain-piano-documentary-567436.mp3");
             audio.loop = true;
             audioRef.current = audio;
             return () => {
@@ -1098,7 +1098,7 @@ export default function App() {
 
     const togglePlay = useCallback(() => {
         if (!audioRef.current && typeof window !== "undefined") {
-            const audio = new Audio("./assets/the_mountain-piano-documentary-567436.mp3");
+            const audio = new Audio("/assets/the_mountain-piano-documentary-567436.mp3");
             audio.loop = true;
             audioRef.current = audio;
         }
@@ -1347,7 +1347,7 @@ export default function App() {
                         <a href="#contact" onClick={(e) => handleSmoothScroll(e, '#contact')}>Contact</a>
                     </nav>
                     <img
-                        src="./assets/signature.png"
+                        src="/assets/signature.png"
                         alt="Veronica Madorini signature"
                         className="hero-signature-img"
                     />
@@ -1434,7 +1434,7 @@ export default function App() {
                     <div className="phrase-video-box">
                         <video
                             ref={phraseVideoRef}
-                            src="./assets/meditation.mp4"
+                            src="/assets/meditation.mp4"
                             className="phrase-video"
                             muted
                             playsInline
