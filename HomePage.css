@@ -918,19 +918,6 @@ a *, button *,
     box-sizing: border-box;
 }
 
-.paper-card-video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    pointer-events: none;
-    border-radius: inherit;
-    z-index: 1;
-}
-
 .paper-mockup-card-inner {
     width: 100%;
     height: 100%;
