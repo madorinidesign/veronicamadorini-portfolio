@@ -431,30 +431,31 @@ a *, button *,
 .vinyl-player-widget::after {
     content: attr(data-tooltip);
     position: absolute;
-    bottom: -36px;
+    bottom: -34px;
     left: 50%;
-    transform: translateX(-50%) translateY(4px);
-    background: rgba(18, 19, 22, 0.95);
+    transform: translateX(-50%);
+    background: rgba(2, 4, 7, 0.95);
     color: #FAFAFA;
     padding: 6px 12px;
     border-radius: 6px;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 500;
     font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
     white-space: nowrap;
-    pointer-events: none;
+    pointer-events: none !important;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.08s ease-out, transform 0.08s ease-out;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    z-index: 99999;
+    transition: none !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(217, 217, 200, 0.3);
+    z-index: 999999;
 }
 
+.hero-image-6:hover .vinyl-player-widget::after,
 .vinyl-player-widget:hover::after {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(-50%) translateY(0);
+    opacity: 1 !important;
+    visibility: visible !important;
+    transition: none !important;
 }
 .vinyl-svg {
     width: 100%;
