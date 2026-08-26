@@ -36,12 +36,10 @@ body {
     cursor: -webkit-grab;
 }
 
-/* Pointing finger cursor for all interactive elements and menu navigation */
+/* Pointing finger cursor for interactive menu links and elements only */
 a, button,
 a *, button *,
-nav, nav *,
-.hero-header, .hero-header *,
-.hero-nav, .hero-nav a, .hero-nav a *,
+.hero-nav a, .hero-nav a *,
 .contact-link, .contact-link *,
 .card, .card *,
 .paper-mockup-card, .paper-mockup-card *,
