@@ -402,13 +402,17 @@ a *, button *,
     height: auto; 
     aspect-ratio: 1 / 1;
     position: absolute;
-    cursor: grab;
+    cursor: pointer !important;
     user-select: none;
     touch-action: pan-y;
+    filter: drop-shadow(0px 10px 5px rgba(34, 34, 34, 0.25));
     will-change: transform;
 }
-.hero-image-6:active {
-    cursor: grabbing;
+.hero-image-6:active,
+.hero-image-6.is-dragging {
+    cursor: grabbing !important;
+    cursor: -webkit-grabbing !important;
+    filter: drop-shadow(0px 16px 12px rgba(0, 0, 0, 0.35)) !important;
 }
 
 /* Vinyl Player Widget Styles */
