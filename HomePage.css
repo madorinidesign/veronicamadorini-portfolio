@@ -5,19 +5,22 @@
 }
 
 *, *::before, *::after {
-    cursor: pointer !important;
+    cursor: grab;
+    cursor: -webkit-grab;
 }
 
 html {
     scroll-behavior: auto;
     touch-action: pan-y pinch-zoom;
     overflow-x: hidden;
-    cursor: pointer !important;
+    cursor: grab;
+    cursor: -webkit-grab;
 }
 
 html, body { 
     box-sizing: border-box; 
-    cursor: pointer !important;
+    cursor: grab;
+    cursor: -webkit-grab;
 }
 
 body {
@@ -29,6 +32,24 @@ body {
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
     touch-action: pan-y pinch-zoom;
+    cursor: grab;
+    cursor: -webkit-grab;
+}
+
+/* Pointing finger cursor for all interactive elements */
+a, button,
+a *, button *,
+.hero-nav a,
+.contact-link,
+.card,
+.paper-mockup-card,
+.paper-mockup-card-inner,
+.paper-mockup-card-button,
+.case-study-full-res-link,
+.project-overlay-close,
+.vinyl-player-widget,
+.hero-image-6,
+.hero-images img {
     cursor: pointer !important;
 }
 
@@ -333,8 +354,10 @@ body {
 
 .hero-images img:active,
 .hero-images img.is-dragging,
+.hero-image-6:active,
 .hero-image-6.is-dragging { 
-    cursor: pointer !important; 
+    cursor: grabbing !important; 
+    cursor: -webkit-grabbing !important;
     filter: drop-shadow(0px 16px 12px rgba(0, 0, 0, 0.35)) !important;
 }
 
@@ -594,7 +617,8 @@ body {
 }
 
 .stage.dragging, .stage.dragging * {
-    cursor: pointer !important;
+    cursor: grabbing !important;
+    cursor: -webkit-grabbing !important;
 }
 
 .card {
