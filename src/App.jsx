@@ -611,22 +611,10 @@ function PerspectiveFanCarousel({ items, onSelectProject, isOverlayOpen }) {
                                 className={`card ${isCenter ? 'center' : ''} paper-mockup-card`}
                                 style={{
                                     ...cardStyle,
-                                    backgroundImage: item.videoUrl ? 'none' : `url(${item.bgImage})`,
+                                    backgroundImage: `url(${item.bgImage})`,
                                     boxShadow: cardBoxShadow,
                                 }}
                             >
-                                {item.videoUrl && (
-                                    <video
-                                        src={item.videoUrl}
-                                        autoPlay
-                                        loop
-                                        muted
-                                        playsInline
-                                        disablePictureInPicture
-                                        disableRemotePlayback
-                                        className="paper-card-video"
-                                    />
-                                )}
                                 <div className="paper-mockup-card-inner">
                                     <div className="paper-mockup-card-button">
                                         <span>{item.buttonText}</span>
@@ -812,6 +800,18 @@ function VinylPlayer({ trackUri = "spotify:track:7KKWdbcxg0qGtzVSFg8jjX", isPlay
 
 function MacbookScreenDisplay({ videoUrl, fallbackImg, title }) {
     const [videoAspect, setVideoAspect] = useState(null);
+    const videoRef = useRef(null);
+
+    useEffect(() => {
+        const video = videoRef.current;
+        if (!video) return;
+        video.defaultMuted = true;
+        video.muted = true;
+        const p = video.play();
+        if (p && p.catch) {
+            p.catch(() => {});
+        }
+    }, [videoUrl]);
 
     const handleLoadedMetadata = (e) => {
         const video = e.target;
@@ -833,6 +833,7 @@ function MacbookScreenDisplay({ videoUrl, fallbackImg, title }) {
                 <div className="macbook-screen-content">
                     {videoUrl ? (
                         <video
+                            ref={videoRef}
                             src={videoUrl}
                             autoPlay
                             loop
@@ -856,6 +857,19 @@ function MacbookScreenDisplay({ videoUrl, fallbackImg, title }) {
 }
 
 function IphoneScreenDisplay({ imgSrc, videoUrl, title }) {
+    const videoRef = useRef(null);
+
+    useEffect(() => {
+        const video = videoRef.current;
+        if (!video) return;
+        video.defaultMuted = true;
+        video.muted = true;
+        const p = video.play();
+        if (p && p.catch) {
+            p.catch(() => {});
+        }
+    }, [videoUrl]);
+
     return (
         <div className="iphone-display-wrapper">
             <div className="iphone-device-body">
@@ -872,6 +886,7 @@ function IphoneScreenDisplay({ imgSrc, videoUrl, title }) {
                     <div className="iphone-screen-content">
                         {videoUrl ? (
                             <video
+                                ref={videoRef}
                                 src={videoUrl}
                                 autoPlay
                                 loop
