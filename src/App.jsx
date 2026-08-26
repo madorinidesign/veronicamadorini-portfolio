@@ -675,7 +675,7 @@ function VinylPlayer({ trackUri = "spotify:track:7KKWdbcxg0qGtzVSFg8jjX", isPlay
         <div>
             <div 
                 className={`vinyl-player-widget ${isPlaying ? "playing" : ""}`}
-                data-tooltip={isPlaying ? "Pause The Mountain Piano Documentary" : "Play The Mountain Piano Documentary"}
+                title={isPlaying ? "Pause The Mountain Piano Documentary" : "Play The Mountain Piano Documentary"}
             >
             <svg viewBox="0 0 250 200" className="vinyl-svg">
                 <defs>

@@ -405,14 +405,12 @@ a *, button *,
     cursor: pointer !important;
     user-select: none;
     touch-action: pan-y;
-    filter: drop-shadow(0px 10px 5px rgba(34, 34, 34, 0.25));
     will-change: transform;
 }
 .hero-image-6:active,
 .hero-image-6.is-dragging {
     cursor: grabbing !important;
     cursor: -webkit-grabbing !important;
-    filter: drop-shadow(0px 16px 12px rgba(0, 0, 0, 0.35)) !important;
 }
 
 /* Vinyl Player Widget Styles */
@@ -426,36 +424,6 @@ a *, button *,
 }
 .vinyl-player-widget:hover {
     transform: scale(1.02);
-}
-
-.vinyl-player-widget::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: -34px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(2, 4, 7, 0.95);
-    color: #FAFAFA;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 500;
-    font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
-    white-space: nowrap;
-    pointer-events: none !important;
-    opacity: 0;
-    visibility: hidden;
-    transition: none !important;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-    border: 1px solid rgba(217, 217, 200, 0.3);
-    z-index: 999999;
-}
-
-.hero-image-6:hover .vinyl-player-widget::after,
-.vinyl-player-widget:hover::after {
-    opacity: 1 !important;
-    visibility: visible !important;
-    transition: none !important;
 }
 .vinyl-svg {
     width: 100%;
