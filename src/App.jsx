@@ -675,6 +675,7 @@ function VinylPlayer({ trackUri = "spotify:track:7KKWdbcxg0qGtzVSFg8jjX", isPlay
         <div>
             <div 
                 className={`vinyl-player-widget ${isPlaying ? "playing" : ""}`}
+                title={isPlaying ? "Pause The Mountain Piano Documentary" : "Play The Mountain Piano Documentary"}
             >
             <svg viewBox="0 0 250 200" className="vinyl-svg">
                 <defs>
@@ -1407,10 +1408,8 @@ export default function App() {
                                 onTouchStart={(event) =>
                                     onPointerDown(event, index)
                                 }
-                                onPointerMove={(event) =>
-                                    handleImagePointerMove(event, isPlaying ? "Pause The Mountain Piano Documentary" : "Play The Mountain Piano Documentary")
-                                }
-                                onPointerLeave={handleImagePointerLeave}
+                                onPointerEnter={() => setHoverLabel(null)}
+                                onPointerMove={() => setHoverLabel(null)}
                                 style={{
                                     transform: transformStyle,
                                     transition: transitionStyle,
