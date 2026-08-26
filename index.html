@@ -6,7 +6,9 @@
     <title>Veronica Madorini — UI/UX Designer</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="icon" type="image/png" media="(prefers-color-scheme: dark)" href="/favicon-dark.png">
+    <link rel="icon" type="image/png" media="(prefers-color-scheme: light)" href="/favicon-light.png">
+    <link rel="icon" type="image/png" href="/favicon-dark.png">
     <link rel="shortcut icon" href="/favicon.ico">
 
     <!-- Fonts -->
@@ -19,6 +21,23 @@
             if (typeof window !== 'undefined') {
                 var vh = window.innerHeight * 0.01;
                 document.documentElement.style.setProperty('--initial-vh', vh + 'px');
+                
+                if (window.matchMedia) {
+                    var setFavicon = function(e) {
+                        var dark = e ? e.matches : window.matchMedia('(prefers-color-scheme: dark)').matches;
+                        var faviconLink = document.querySelector('link[rel="shortcut icon"]');
+                        if (faviconLink) {
+                            faviconLink.href = dark ? '/favicon-dark.png' : '/favicon-light.png';
+                        }
+                    };
+                    var matcher = window.matchMedia('(prefers-color-scheme: dark)');
+                    if (matcher.addEventListener) {
+                        matcher.addEventListener('change', setFavicon);
+                    } else if (matcher.addListener) {
+                        matcher.addListener(setFavicon);
+                    }
+                    setFavicon();
+                }
             }
         })();
     </script>
