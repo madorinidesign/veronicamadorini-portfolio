@@ -35,6 +35,7 @@ const DRAG_IMAGES = [
     {
         isVinylPlayer: true,
         className: "hero-image hero-image-6",
+        label: "Play The Mountain Piano Documentary",
     },
 ];
 
@@ -674,7 +675,7 @@ function VinylPlayer({ trackUri = "spotify:track:7KKWdbcxg0qGtzVSFg8jjX", isPlay
         <div>
             <div 
                 className={`vinyl-player-widget ${isPlaying ? "playing" : ""}`}
-                title={isPlaying ? "Pause Alex Morgan — Flamenco Spanish Guitar" : "Play Alex Morgan — Flamenco Spanish Guitar"}
+                title={isPlaying ? "Pause The Mountain Piano Documentary" : "Play The Mountain Piano Documentary"}
             >
             <svg viewBox="0 0 250 200" className="vinyl-svg">
                 <defs>
@@ -1407,8 +1408,10 @@ export default function App() {
                                 onTouchStart={(event) =>
                                     onPointerDown(event, index)
                                 }
-                                onPointerEnter={() => setHoverLabel(null)}
-                                onPointerMove={() => setHoverLabel(null)}
+                                onPointerMove={(event) =>
+                                    handleImagePointerMove(event, isPlaying ? "Pause The Mountain Piano Documentary" : "Play The Mountain Piano Documentary")
+                                }
+                                onPointerLeave={handleImagePointerLeave}
                                 style={{
                                     transform: transformStyle,
                                     transition: transitionStyle,
