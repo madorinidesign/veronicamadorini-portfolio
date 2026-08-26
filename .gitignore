@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# Build & Output
+dist/
+build/
+
+# Heavy Raw Media & Root Test Exports
+/*.mp4
+/*.mov
+/*.gif
+/*.webm
+*_frames*/
+scratch/
+*.py
+assets/
+
+# OS & IDE Files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Python & Virtual Envs
+.venv/
+spotify-mcp/.venv/
+__pycache__/
+*.pyc
+
+# Logs
+*.log
