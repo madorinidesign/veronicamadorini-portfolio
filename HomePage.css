@@ -36,10 +36,10 @@ body {
     cursor: -webkit-grab;
 }
 
-/* Pointing finger cursor for interactive menu links and elements only */
+/* Pointing finger cursor for menu in navigation bar and interactive elements */
 a, button,
 a *, button *,
-.hero-nav a, .hero-nav a *,
+.hero-nav, .hero-nav *,
 .contact-link, .contact-link *,
 .card, .card *,
 .paper-mockup-card, .paper-mockup-card *,
@@ -52,6 +52,12 @@ a *, button *,
 .hero-image-6, .hero-image-6 *,
 .hero-images img {
     cursor: pointer !important;
+}
+
+.hero-header,
+.hero-signature-img {
+    cursor: grab !important;
+    cursor: -webkit-grab !important;
 }
 
 .home-page { 
