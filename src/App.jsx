@@ -1254,16 +1254,31 @@ export default function App() {
             }
         }
 
-        // Show floating tooltip label while dragging on mobile/touch/desktop
+        // Show floating tooltip label while dragging on mobile / desktop
         const currentItem = DRAG_IMAGES[meta.index];
-        if (currentItem && currentItem.label && !currentItem.isVinylPlayer) {
+        if (currentItem) {
             const winWidth = typeof window !== "undefined" ? window.innerWidth : 1200;
             const winHeight = typeof window !== "undefined" ? window.innerHeight : 800;
-            setHoverLabel({
-                x: clamp(coords.clientX, 10, winWidth - 120),
-                y: clamp(coords.clientY, 10, winHeight - 60),
-                text: currentItem.label,
-            });
+            const isMobile = winWidth <= 810;
+
+            if (currentItem.isVinylPlayer) {
+                if (isMobile) {
+                    const vinylText = isPlaying
+                        ? "Pause The Mountain Piano Documentary"
+                        : "Play The Mountain Piano Documentary";
+                    setHoverLabel({
+                        x: clamp(coords.clientX, 10, winWidth - 120),
+                        y: clamp(coords.clientY, 10, winHeight - 60),
+                        text: vinylText,
+                    });
+                }
+            } else if (currentItem.label) {
+                setHoverLabel({
+                    x: clamp(coords.clientX, 10, winWidth - 120),
+                    y: clamp(coords.clientY, 10, winHeight - 60),
+                    text: currentItem.label,
+                });
+            }
         }
 
         if (rafIdRef.current) return;

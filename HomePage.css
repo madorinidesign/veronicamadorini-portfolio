@@ -453,8 +453,10 @@ a *, button *,
     z-index: 99999;
 }
 
-.vinyl-player-widget:hover::after {
-    display: block !important;
+@media (hover: hover) and (pointer: fine) {
+    .vinyl-player-widget:hover::after {
+        display: block !important;
+    }
 }
 .vinyl-svg {
     width: 100%;
