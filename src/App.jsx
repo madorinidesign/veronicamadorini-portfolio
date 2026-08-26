@@ -611,10 +611,22 @@ function PerspectiveFanCarousel({ items, onSelectProject, isOverlayOpen }) {
                                 className={`card ${isCenter ? 'center' : ''} paper-mockup-card`}
                                 style={{
                                     ...cardStyle,
-                                    backgroundImage: `url(${item.bgImage})`,
+                                    backgroundImage: item.videoUrl ? 'none' : `url(${item.bgImage})`,
                                     boxShadow: cardBoxShadow,
                                 }}
                             >
+                                {item.videoUrl && (
+                                    <video
+                                        src={item.videoUrl}
+                                        autoPlay
+                                        loop
+                                        muted
+                                        playsInline
+                                        disablePictureInPicture
+                                        disableRemotePlayback
+                                        className="paper-card-video"
+                                    />
+                                )}
                                 <div className="paper-mockup-card-inner">
                                     <div className="paper-mockup-card-button">
                                         <span>{item.buttonText}</span>
