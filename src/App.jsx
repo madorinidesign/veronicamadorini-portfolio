@@ -18,7 +18,7 @@ const DRAG_IMAGES = [
         src: "https://app.paper.design/file-assets/01KY4X3C4M5YQAKN37W0653780/00SN5DY5217V1VGSB2EY6DKNHV.jpg",
         alt: "Bicycle photo",
         className: "hero-image hero-image-3",
-        label: "My yellow bicicle that helped me move around",
+        label: "My yellow bicycle that helped me move around",
     },
     {
         src: "https://app.paper.design/file-assets/01KY4X3C4M5YQAKN37W0653780/6ECYAABTJKA0RHDVWW9M95PE0S.png",
