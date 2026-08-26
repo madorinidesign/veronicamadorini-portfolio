@@ -675,7 +675,7 @@ function VinylPlayer({ trackUri = "spotify:track:7KKWdbcxg0qGtzVSFg8jjX", isPlay
         <div>
             <div 
                 className={`vinyl-player-widget ${isPlaying ? "playing" : ""}`}
-                data-tooltip={isPlaying ? "Pause The Mountain Piano Documentary" : "Play The Mountain Piano Documentary"}
+                title={isPlaying ? "Pause The Mountain Piano Documentary" : "Play The Mountain Piano Documentary"}
             >
             <svg viewBox="0 0 250 200" className="vinyl-svg">
                 <defs>
@@ -1254,31 +1254,16 @@ export default function App() {
             }
         }
 
-        // Show floating tooltip label while dragging on mobile / desktop
+        // Show floating tooltip label while dragging non-vinyl images only
         const currentItem = DRAG_IMAGES[meta.index];
-        if (currentItem) {
+        if (currentItem && currentItem.label && !currentItem.isVinylPlayer) {
             const winWidth = typeof window !== "undefined" ? window.innerWidth : 1200;
             const winHeight = typeof window !== "undefined" ? window.innerHeight : 800;
-            const isMobile = winWidth <= 810;
-
-            if (currentItem.isVinylPlayer) {
-                if (isMobile) {
-                    const vinylText = isPlaying
-                        ? "Pause The Mountain Piano Documentary"
-                        : "Play The Mountain Piano Documentary";
-                    setHoverLabel({
-                        x: clamp(coords.clientX, 10, winWidth - 120),
-                        y: clamp(coords.clientY, 10, winHeight - 60),
-                        text: vinylText,
-                    });
-                }
-            } else if (currentItem.label) {
-                setHoverLabel({
-                    x: clamp(coords.clientX, 10, winWidth - 120),
-                    y: clamp(coords.clientY, 10, winHeight - 60),
-                    text: currentItem.label,
-                });
-            }
+            setHoverLabel({
+                x: clamp(coords.clientX, 10, winWidth - 120),
+                y: clamp(coords.clientY, 10, winHeight - 60),
+                text: currentItem.label,
+            });
         }
 
         if (rafIdRef.current) return;
