@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Transfermarkt Redesign — Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --green-900: #0A2B12;
+    --green-800: #0F3D1A;
+    --green-700: #155224;
+    --green-600: #1A6B2E;
+    --green-500: #1E8537;
+    --green-400: #27A347;
+    --green-300: #4DBD6B;
+    --green-200: #8ED4A3;
+    --green-100: #C8EBD3;
+    --green-50:  #EAF6EE;
+    --sand-900: #1C1A14;
+    --sand-800: #2E2B20;
+    --sand-700: #4A4637;
+    --sand-400: #8A8472;
+    --sand-200: #C8C3B2;
+    --sand-100: #E5E1D4;
+    --sand-50:  #F5F3EE;
+    --white: #FFFFFF;
+    --ink: #0F1A0C;
+    --ink-muted: #3D4B39;
+    --ink-light: #6B7B66;
+    --accent-gold: #B8860B;
+    --accent-red: #C0392B;
+    --font-body: 'DM Sans', sans-serif;
+    --font-display: 'DM Serif Display', serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { font-family: var(--font-body); color: var(--ink); background: var(--white); }
+  body { max-width: 1100px; margin: 0 auto; }
+
+  /* ─── COVER ─────────────────────────────────────────── */
+  .cover {
+    min-height: 100vh;
+    background: var(--green-800);
+    display: flex; flex-direction: column;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover-noise {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(39,163,71,.18) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(30,133,55,.12) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .cover-top-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 32px 64px;
+    position: relative; z-index: 1;
+  }
+  .cover-logo {
+    font-family: var(--font-body); font-size: 13px; font-weight: 500;
+    color: var(--green-200); letter-spacing: .12em; text-transform: uppercase;
+  }
+  .cover-year { font-size: 13px; color: var(--green-300); letter-spacing:.08em; }
+
+  .cover-body {
+    flex: 1; display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 0 64px 80px;
+    position: relative; z-index: 1;
+  }
+  .cover-tag {
+    display: inline-block;
+    background: rgba(39,163,71,.25);
+    border: 1px solid rgba(39,163,71,.4);
+    color: var(--green-200);
+    font-size: 12px; font-weight: 500; letter-spacing:.1em; text-transform: uppercase;
+    padding: 6px 16px; border-radius: 100px;
+    margin-bottom: 28px;
+  }
+  .cover-title {
+    font-family: var(--font-display);
+    font-size: clamp(52px, 7vw, 96px);
+    line-height: 1.04;
+    color: var(--white);
+    max-width: 780px;
+    margin-bottom: 24px;
+  }
+  .cover-title em { color: var(--green-300); font-style: italic; }
+  .cover-sub {
+    font-size: 18px; font-weight: 300; color: var(--green-100);
+    max-width: 560px; line-height: 1.65;
+    margin-bottom: 56px;
+  }
+  .cover-meta-row {
+    display: flex; gap: 40px; flex-wrap: wrap;
+    border-top: 1px solid rgba(255,255,255,.12);
+    padding-top: 32px;
+  }
+  .cover-meta-item { display: flex; flex-direction: column; gap: 4px; }
+  .cover-meta-label { font-size: 11px; letter-spacing:.1em; text-transform: uppercase; color: var(--green-400); font-weight:500; }
+  .cover-meta-val { font-size: 15px; color: var(--white); }
+
+  /* ─── SECTION SHELLS ──────────────────────────────────── */
+  section { padding: 96px 64px; }
+  section.alt { background: var(--sand-50); }
+  section.dark { background: var(--green-900); color: var(--white); }
+  section.dark p, section.dark li { color: var(--green-100); }
+  section.dark .section-label { color: var(--green-400); }
+  section.dark h2 { color: var(--white); }
+
+  .section-label {
+    font-size: 11px; font-weight: 600; letter-spacing:.14em; text-transform: uppercase;
+    color: var(--green-600); margin-bottom: 16px;
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(34px, 4vw, 52px);
+    line-height: 1.1; color: var(--ink);
+    margin-bottom: 20px;
+  }
+  .lead {
+    font-size: 19px; font-weight: 300; line-height: 1.7;
+    color: var(--ink-muted); max-width: 680px; margin-bottom: 48px;
+  }
+  p { font-size: 16px; line-height: 1.75; color: var(--ink-muted); margin-bottom: 20px; }
+
+  /* ─── TWO-COL ─────────────────────────────────────────── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+  .three-col { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; }
+  .four-col { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
+  @media(max-width:780px){
+    section { padding: 64px 24px; }
+    .two-col, .three-col, .four-col { grid-template-columns:1fr; }
+    .cover-body { padding: 0 24px 60px; }
+    .cover-top-bar { padding: 24px; }
+    .cover-title { font-size: 44px; }
+  }
+
+  /* ─── STAT CARDS ─────────────────────────────────────── */
+  .stat-card {
+    background: var(--white);
+    border: 1px solid var(--sand-100);
+    border-radius: 16px;
+    padding: 32px 28px;
+  }
+  .stat-card .num {
+    font-family: var(--font-display);
+    font-size: 48px; line-height: 1;
+    color: var(--green-600);
+    margin-bottom: 8px;
+  }
+  .stat-card .desc { font-size: 14px; color: var(--ink-light); line-height: 1.5; }
+
+  /* ─── CALLOUT / BLOCKQUOTE ────────────────────────────── */
+  .callout {
+    background: var(--green-50);
+    border-left: 4px solid var(--green-400);
+    border-radius: 0 12px 12px 0;
+    padding: 28px 32px;
+    margin: 32px 0;
+  }
+  .callout p { font-size: 18px; font-style: italic; color: var(--green-800); margin:0; }
+
+  /* ─── PROBLEM CARDS ──────────────────────────────────── */
+  .problem-card {
+    background: var(--white);
+    border: 1px solid var(--sand-100);
+    border-radius: 14px;
+    padding: 28px 24px;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .problem-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .problem-icon.red { background: #FDECEA; }
+  .problem-icon.amber { background: #FEF3D6; }
+  .problem-icon.blue { background: #E8F4FD; }
+  .problem-card h4 { font-size: 16px; font-weight: 600; color: var(--ink); }
+  .problem-card p { font-size: 14px; color: var(--ink-light); margin: 0; line-height: 1.6; }
+
+  /* ─── BEFORE / AFTER ─────────────────────────────────── */
+  .ba-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-radius: 20px; overflow: hidden; margin: 40px 0; }
+  .ba-panel { padding: 32px; }
+  .ba-panel.before { background: #1A0F0F; }
+  .ba-panel.after  { background: var(--green-800); }
+  .ba-label {
+    font-size: 11px; font-weight: 600; letter-spacing:.14em; text-transform: uppercase;
+    margin-bottom: 20px; padding: 4px 12px; border-radius: 100px; display: inline-block;
+  }
+  .before .ba-label { background: rgba(192,57,43,.3); color: #F5A49E; }
+  .after  .ba-label { background: rgba(39,163,71,.3); color: var(--green-200); }
+  .ba-item {
+    display: flex; gap: 12px; align-items: flex-start;
+    margin-bottom: 14px;
+  }
+  .ba-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 7px; }
+  .before .ba-dot { background: #C0392B; }
+  .after  .ba-dot { background: var(--green-300); }
+  .ba-item p { font-size: 14px; color: rgba(255,255,255,.75); margin: 0; line-height: 1.6; }
+
+  /* ─── PROCESS STEPS ─────────────────────────────────── */
+  .process-step {
+    display: flex; gap: 24px; align-items: flex-start;
+    padding: 28px 0; border-bottom: 1px solid var(--sand-100);
+  }
+  .process-step:last-child { border-bottom: none; }
+  .step-num {
+    font-family: var(--font-display);
+    font-size: 40px; line-height: 1;
+    color: var(--green-200); flex-shrink: 0; width: 56px;
+  }
+  .step-content h4 { font-size: 17px; font-weight: 600; margin-bottom: 6px; color: var(--ink); }
+  .step-content p { font-size: 14px; color: var(--ink-light); margin: 0; line-height: 1.6; }
+
+  /* ─── INSIGHT CARDS ─────────────────────────────────── */
+  .insight-card {
+    background: var(--green-900);
+    border-radius: 16px;
+    padding: 28px 24px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .insight-card .emoji { font-size: 24px; }
+  .insight-card h4 { font-size: 16px; font-weight: 500; color: var(--white); }
+  .insight-card p { font-size: 13px; color: var(--green-200); margin: 0; line-height: 1.6; }
+
+  /* ─── DESKTOP MOCKUP ─────────────────────────────────── */
+  .browser-frame {
+    background: var(--sand-100);
+    border-radius: 16px 16px 12px 12px;
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0,0,0,.18);
+    margin: 40px 0;
+  }
+  .browser-bar {
+    background: #E8E6DF;
+    padding: 10px 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .browser-dots { display: flex; gap: 6px; }
+  .browser-dots span {
+    width: 12px; height: 12px; border-radius: 50%;
+  }
+  .browser-dots span:nth-child(1){ background: #FF5F57; }
+  .browser-dots span:nth-child(2){ background: #FFBD2E; }
+  .browser-dots span:nth-child(3){ background: #28CA41; }
+  .browser-url {
+    flex: 1; background: var(--white);
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-size: 12px; color: var(--sand-700);
+    font-family: monospace;
+  }
+  .browser-content { background: var(--white); min-height: 520px; }
+
+  /* ─── DESKTOP HOMEPAGE MOCKUP ─────────────────────────── */
+  .mock-nav {
+    background: var(--green-800);
+    padding: 0 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+  .mock-logo { font-family: var(--font-display); font-size: 20px; color: var(--white); }
+  .mock-nav-links { display: flex; gap: 24px; }
+  .mock-nav-link { font-size: 13px; color: rgba(255,255,255,.7); text-decoration: none; }
+  .mock-nav-link.active { color: var(--white); font-weight: 500; }
+  .mock-subnav {
+    background: var(--green-700);
+    padding: 0 40px;
+    display: flex; gap: 28px;
+    height: 38px; align-items: center;
+  }
+  .mock-subnav span { font-size: 12px; color: rgba(255,255,255,.65); }
+  .mock-subnav span.active { color: var(--white); border-bottom: 2px solid var(--green-300); padding-bottom: 2px; }
+
+  .mock-hero {
+    background: linear-gradient(135deg, var(--green-50) 0%, var(--white) 100%);
+    padding: 32px 40px;
+    display: grid; grid-template-columns: 1.8fr 1fr; gap: 24px;
+  }
+  .mock-hero-main {}
+  .mock-news-ticker {
+    background: var(--green-800); color: var(--white);
+    border-radius: 10px; padding: 14px 18px;
+    margin-bottom: 16px;
+    font-size: 12px; display: flex; gap: 10px; align-items: center;
+  }
+  .ticker-tag {
+    background: var(--green-400); color: var(--white);
+    font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px;
+    white-space: nowrap; text-transform: uppercase; letter-spacing: .06em;
+  }
+  .mock-card-big {
+    background: var(--white);
+    border: 1px solid var(--sand-100);
+    border-radius: 12px; overflow: hidden;
+  }
+  .mock-card-img {
+    height: 160px;
+    background: linear-gradient(135deg, #1a3d1a, var(--green-600));
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .mock-card-img-field {
+    width: 120px; height: 80px; border: 2px solid rgba(255,255,255,.3); border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .mock-card-img-field::before {
+    content: '';
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,.4);
+  }
+  .mock-card-body { padding: 16px; }
+  .mock-card-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+  .mock-card-sub { font-size: 11px; color: var(--ink-light); }
+
+  .mock-sidebar {}
+  .mock-sidebar-card {
+    background: var(--white);
+    border: 1px solid var(--sand-100);
+    border-radius: 10px; padding: 14px;
+    margin-bottom: 12px;
+  }
+  .mock-sidebar-label { font-size: 10px; font-weight: 600; letter-spacing:.1em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .mock-transfer-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--sand-50); }
+  .mock-transfer-row:last-child { border-bottom: none; }
+  .mock-player-dot { width: 28px; height: 28px; border-radius: 50%; background: var(--green-100); flex-shrink: 0; }
+  .mock-player-info { flex: 1; }
+  .mock-player-name { font-size: 11px; font-weight: 500; color: var(--ink); }
+  .mock-player-clubs { font-size: 10px; color: var(--ink-light); }
+  .mock-fee { font-size: 11px; font-weight: 600; color: var(--green-600); }
+
+  .mock-stats-row {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 12px;
+    padding: 20px 40px; background: var(--sand-50);
+    border-top: 1px solid var(--sand-100);
+  }
+  .mock-stat-item { text-align: center; }
+  .mock-stat-num { font-size: 20px; font-weight: 600; color: var(--ink); }
+  .mock-stat-label { font-size: 10px; color: var(--ink-light); text-transform: uppercase; letter-spacing:.08em; }
+
+  /* ─── MOBILE MOCKUP ──────────────────────────────────── */
+  .phones-row {
+    display: flex; gap: 32px; justify-content: center;
+    align-items: flex-start;
+    padding: 48px 0;
+    overflow-x: auto;
+  }
+  .phone-frame {
+    width: 240px; flex-shrink: 0;
+    background: var(--green-900);
+    border-radius: 36px;
+    padding: 12px;
+    box-shadow: 0 24px 64px rgba(0,0,0,.3);
+    position: relative;
+  }
+  .phone-notch {
+    width: 80px; height: 22px; background: var(--green-900);
+    border-radius: 0 0 14px 14px;
+    margin: 0 auto 4px;
+  }
+  .phone-screen {
+    background: var(--white);
+    border-radius: 28px;
+    overflow: hidden;
+    min-height: 480px;
+  }
+  .phone-screen-label {
+    text-align: center; font-size: 11px; font-weight: 500;
+    color: var(--ink-light); margin-top: 12px;
+    letter-spacing: .06em; text-transform: uppercase;
+  }
+
+  .mob-topbar {
+    background: var(--green-800);
+    padding: 12px 14px 10px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .mob-logo { font-family: var(--font-display); font-size: 15px; color: var(--white); }
+  .mob-search {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: rgba(255,255,255,.15); display: flex; align-items: center; justify-content: center;
+  }
+  .mob-hero-banner {
+    background: linear-gradient(160deg, var(--green-700), var(--green-500));
+    padding: 16px 14px;
+  }
+  .mob-hero-tag { font-size: 9px; font-weight: 700; letter-spacing:.1em; text-transform: uppercase; color: var(--green-200); margin-bottom: 6px; }
+  .mob-hero-title { font-size: 13px; font-weight: 600; color: var(--white); line-height: 1.3; }
+  .mob-hero-sub { font-size: 10px; color: var(--green-100); margin-top: 4px; }
+
+  .mob-section-head {
+    padding: 10px 14px 4px;
+    font-size: 10px; font-weight: 700;
+    letter-spacing:.1em; text-transform: uppercase;
+    color: var(--ink); display: flex; justify-content: space-between;
+  }
+  .mob-section-head span { color: var(--green-500); }
+
+  .mob-transfer-item {
+    padding: 8px 14px;
+    display: flex; gap: 10px; align-items: center;
+    border-bottom: 1px solid var(--sand-50);
+  }
+  .mob-player-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--green-100); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600; color: var(--green-700);
+  }
+  .mob-player-details { flex: 1; }
+  .mob-player-nm { font-size: 12px; font-weight: 500; color: var(--ink); }
+  .mob-player-clubs { font-size: 10px; color: var(--ink-light); }
+  .mob-player-fee { font-size: 12px; font-weight: 600; color: var(--green-600); }
+
+  .mob-bottom-nav {
+    background: var(--white);
+    border-top: 1px solid var(--sand-100);
+    padding: 8px 0;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+  }
+  .mob-nav-item {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    padding: 6px 0;
+  }
+  .mob-nav-dot { width: 16px; height: 16px; border-radius: 4px; background: var(--sand-100); }
+  .mob-nav-dot.active { background: var(--green-500); }
+  .mob-nav-label { font-size: 9px; color: var(--ink-light); }
+  .mob-nav-label.active { color: var(--green-600); font-weight: 600; }
+
+  /* ─── PLAYER PROFILE PHONE ───────────────────────────── */
+  .mob-profile-hero {
+    background: linear-gradient(160deg, #0F3D1A, #1E8537);
+    padding: 16px 14px 20px;
+    position: relative;
+  }
+  .mob-back { font-size: 11px; color: var(--green-100); margin-bottom: 10px; }
+  .mob-player-row { display: flex; gap: 12px; align-items: flex-end; }
+  .mob-player-pic {
+    width: 56px; height: 56px; border-radius: 14px;
+    background: rgba(255,255,255,.15);
+    border: 2px solid rgba(255,255,255,.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 700; color: var(--white);
+  }
+  .mob-player-meta {}
+  .mob-player-fullname { font-size: 15px; font-weight: 600; color: var(--white); }
+  .mob-player-pos { font-size: 11px; color: var(--green-200); }
+  .mob-value-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+    border-radius: 100px; padding: 4px 12px;
+    margin-top: 8px;
+  }
+  .mob-value-pill span { font-size: 11px; color: var(--white); }
+  .mob-value-pill strong { font-size: 14px; font-weight: 600; color: var(--green-200); }
+
+  .mob-stats-grid {
+    padding: 14px;
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+  .mob-stat-box {
+    background: var(--sand-50);
+    border-radius: 8px; padding: 8px;
+    text-align: center;
+  }
+  .mob-stat-box .n { font-size: 16px; font-weight: 600; color: var(--ink); }
+  .mob-stat-box .l { font-size: 9px; color: var(--ink-light); text-transform: uppercase; letter-spacing:.06em; }
+
+  .mob-history-section { padding: 0 14px 14px; }
+  .mob-history-title { font-size: 10px; font-weight: 700; letter-spacing:.1em; text-transform: uppercase; color: var(--ink); margin-bottom: 8px; }
+  .mob-history-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 0; border-bottom: 1px solid var(--sand-50);
+  }
+  .mob-club-badge {
+    width: 22px; height: 22px; border-radius: 6px;
+    background: var(--green-100); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px; font-weight: 700; color: var(--green-700);
+  }
+  .mob-club-info { flex: 1; }
+  .mob-club-nm { font-size: 11px; font-weight: 500; color: var(--ink); }
+  .mob-club-years { font-size: 9px; color: var(--ink-light); }
+  .mob-club-fee { font-size: 10px; font-weight: 600; color: var(--green-600); }
+
+  /* ─── COLOR PALETTE ──────────────────────────────────── */
+  .palette-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 24px 0; }
+  .swatch {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+  }
+  .swatch-color { width: 56px; height: 56px; border-radius: 10px; }
+  .swatch-name { font-size: 10px; color: var(--ink-light); text-align: center; }
+
+  /* ─── TYPE SPECIMEN ──────────────────────────────────── */
+  .type-row {
+    display: flex; gap: 24px; align-items: baseline;
+    padding: 16px 0; border-bottom: 1px solid var(--sand-100);
+  }
+  .type-label { width: 120px; font-size: 12px; color: var(--ink-light); flex-shrink: 0; }
+
+  /* ─── IMPACT METRICS ─────────────────────────────────── */
+  .impact-card {
+    background: var(--white);
+    border: 1px solid var(--sand-100);
+    border-radius: 16px; padding: 32px 28px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .impact-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: var(--green-400);
+  }
+  .impact-card .big-num {
+    font-family: var(--font-display);
+    font-size: 54px; line-height: 1; color: var(--green-600);
+    margin-bottom: 8px;
+  }
+  .impact-card .metric-label { font-size: 15px; font-weight: 500; color: var(--ink); margin-bottom: 8px; }
+  .impact-card .metric-note { font-size: 13px; color: var(--ink-light); line-height: 1.5; }
+
+  /* ─── DESIGN DECISION CARDS ──────────────────────────── */
+  .decision-card {
+    background: var(--white);
+    border: 1px solid var(--sand-100);
+    border-radius: 14px; padding: 28px 24px;
+  }
+  .decision-num {
+    font-family: var(--font-display);
+    font-size: 32px; color: var(--green-200); margin-bottom: 12px;
+  }
+  .decision-card h4 { font-size: 17px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+  .decision-card p { font-size: 14px; color: var(--ink-light); margin: 0; line-height: 1.6; }
+  .decision-tag {
+    display: inline-block; margin-top: 14px;
+    background: var(--green-50); color: var(--green-700);
+    font-size: 11px; font-weight: 500; padding: 4px 12px; border-radius: 100px;
+  }
+
+  /* ─── TIMELINE ───────────────────────────────────────── */
+  .timeline { padding-left: 32px; border-left: 2px solid var(--green-200); }
+  .timeline-item { padding-bottom: 36px; position: relative; }
+  .timeline-dot {
+    width: 14px; height: 14px; border-radius: 50%; background: var(--green-400);
+    position: absolute; left: -40px; top: 4px;
+    border: 3px solid var(--white); box-shadow: 0 0 0 2px var(--green-400);
+  }
+  .timeline-date { font-size: 12px; font-weight: 600; color: var(--green-600); margin-bottom: 4px; }
+  .timeline-title { font-size: 16px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+  .timeline-body { font-size: 14px; color: var(--ink-light); line-height: 1.6; }
+
+  /* ─── REFLECTION / OUTRO ─────────────────────────────── */
+  .outro {
+    background: var(--green-900);
+    padding: 96px 64px;
+    text-align: center;
+  }
+  .outro h2 { color: var(--white); font-size: clamp(32px,4vw,52px); margin-bottom: 20px; }
+  .outro .lead { color: var(--green-100); max-width: 640px; margin: 0 auto 48px; font-size: 18px; }
+  .outro-pill {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: rgba(39,163,71,.2); border: 1px solid rgba(39,163,71,.4);
+    color: var(--green-200); font-size: 14px; font-weight: 500;
+    padding: 12px 24px; border-radius: 100px;
+    margin: 6px;
+  }
+
+  /* ─── HORIZONTAL RULE ────────────────────────────────── */
+  .divider { border: none; border-top: 1px solid var(--sand-100); margin: 0; }
+
+  /* ─── AD COMPARISON BOX ──────────────────────────────── */
+  .ad-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 32px 0; }
+  .ad-box { border-radius: 12px; overflow: hidden; }
+  .ad-header { padding: 8px 14px; font-size: 11px; font-weight: 700; letter-spacing:.1em; text-transform: uppercase; }
+  .ad-box.bad .ad-header { background: #C0392B; color: #fff; }
+  .ad-box.good .ad-header { background: var(--green-500); color: #fff; }
+  .ad-body { padding: 16px 14px; background: var(--white); border: 1px solid var(--sand-100); border-top: none; border-radius: 0 0 12px 12px; }
+  .ad-body p { font-size: 13px; color: var(--ink-muted); margin: 0 0 8px; }
+  .ad-banner-placeholder {
+    border-radius: 6px; padding: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .ad-banner-placeholder.bad { background: #FDE8E8; color: #C0392B; height: 50px; border: 2px dashed #C0392B; }
+  .ad-banner-placeholder.many { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .ad-banner-placeholder.many div { background: #FDE8E8; border: 2px dashed #C0392B; border-radius: 4px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #C0392B; }
+  .ad-banner-placeholder.good { background: var(--green-50); color: var(--green-700); height: 50px; border: 2px dashed var(--green-400); }
+
+  /* ─── TESTIMONIAL / USER QUOTE ───────────────────────── */
+  .user-quote {
+    padding: 36px 40px;
+    background: var(--white);
+    border: 1px solid var(--sand-100);
+    border-radius: 16px;
+    position: relative;
+  }
+  .quote-mark { font-family: var(--font-display); font-size: 80px; line-height: .8; color: var(--green-100); position: absolute; top: 16px; left: 28px; }
+  .user-quote p { font-size: 18px; font-style: italic; color: var(--ink); position: relative; z-index: 1; padding-left: 16px; margin: 0 0 16px; }
+  .user-quote footer { font-size: 13px; color: var(--ink-light); padding-left: 16px; }
+
+  /* ─── SECTION DIVIDER WITH LABEL ─────────────────────── */
+  .section-break {
+    text-align: center; padding: 32px 0;
+    position: relative;
+  }
+  .section-break::before {
+    content: ''; position: absolute;
+    top: 50%; left: 0; right: 0; height: 1px;
+    background: var(--sand-100);
+  }
+  .section-break span {
+    position: relative; z-index: 1;
+    background: var(--white); padding: 0 20px;
+    font-size: 12px; letter-spacing:.1em; text-transform: uppercase;
+    color: var(--ink-light);
+  }
+
+  /* ─── TABLE ──────────────────────────────────────────── */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; padding: 10px 12px; background: var(--sand-50); color: var(--ink-light); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
+  td { padding: 12px; border-bottom: 1px solid var(--sand-50); color: var(--ink-muted); }
+  .tag-green { background: var(--green-50); color: var(--green-700); font-size: 11px; padding: 3px 8px; border-radius: 100px; font-weight: 500; }
+  .tag-red { background: #FDECEA; color: #C0392B; font-size: 11px; padding: 3px 8px; border-radius: 100px; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<!-- ════════════════ COVER ════════════════ -->
+<div class="cover">
+  <div class="cover-noise"></div>
+  <div class="cover-top-bar">
+    <div class="cover-logo">UI / UX Design — Portfolio</div>
+    <div class="cover-year">2025 — 2026</div>
+  </div>
+  <div class="cover-body">
+    <div class="cover-tag">Case Study</div>
+    <h1 class="cover-title">Transfermarkt<br/><em>Redesigned</em></h1>
+    <p class="cover-sub">Turning one of football's most visited platforms into an engaging, clean, ad-conscious experience — designed to break into the global top 3 football sites.</p>
+    <div class="cover-meta-row">
+      <div class="cover-meta-item">
+        <span class="cover-meta-label">Role</span>
+        <span class="cover-meta-val">UX / UI Designer</span>
+      </div>
+      <div class="cover-meta-item">
+        <span class="cover-meta-label">Platform</span>
+        <span class="cover-meta-val">Web + Mobile</span>
+      </div>
+      <div class="cover-meta-item">
+        <span class="cover-meta-label">Tools</span>
+        <span class="cover-meta-val">Figma · FigJam · Maze</span>
+      </div>
+      <div class="cover-meta-item">
+        <span class="cover-meta-label">Timeline</span>
+        <span class="cover-meta-val">3 months</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ OVERVIEW ════════════════ -->
+<section>
+  <p class="section-label">01 — Overview</p>
+  <h2>The world's football database, reimagined</h2>
+  <p class="lead">Transfermarkt holds unrivalled data on player values, transfers, squads and stats. But its user experience had become a barrier, not a bridge. This redesign focuses on three pillars: clarity, calm, and trust.</p>
+
+  <div class="four-col">
+    <div class="stat-card">
+      <div class="num">#7</div>
+      <div class="desc">Current global ranking among football websites</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">32M+</div>
+      <div class="desc">Monthly unique visitors at the time of research</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">68%</div>
+      <div class="desc">Of surveyed users cite ads as their main pain point</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">Top 3</div>
+      <div class="desc">Target ranking post-redesign with improved engagement</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ════════════════ PROBLEM ════════════════ -->
+<section class="alt">
+  <p class="section-label">02 — The Problem</p>
+  <h2>Great data. Poor experience.</h2>
+  <p class="lead">Despite housing the most comprehensive football database on the internet, Transfermarkt was haemorrhaging users to cleaner competitors. The data was irreplaceable — the experience wasn't.</p>
+
+  <div class="three-col" style="margin-bottom:40px;">
+    <div class="problem-card">
+      <div class="problem-icon red">⚡</div>
+      <h4>Ad overload</h4>
+      <p>Up to 5–7 ad units per screen on desktop. Intrusive banners broke reading flow, interrupted table scanning and caused accidental clicks on mobile.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon amber">📐</div>
+      <h4>No visual hierarchy</h4>
+      <p>All sections competed for attention equally. Primary content — transfers, market values — was buried under secondary widgets and promotional boxes.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon blue">📱</div>
+      <h4>Unusable on mobile</h4>
+      <p>Tables overflowed horizontally. Navigation was hidden behind small icons. Tapping links was imprecise due to dense layouts not adapted for touch.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p>"I use Transfermarkt every day during transfer windows, but I always feel exhausted after five minutes. Every time I scroll, something blinks or pops."</p>
+  </div>
+
+  <div class="ad-compare">
+    <div class="ad-box bad">
+      <div class="ad-header">Before — Ad density (original)</div>
+      <div class="ad-body">
+        <div class="ad-banner-placeholder bad" style="height:36px; margin-bottom:6px;">LEADERBOARD AD</div>
+        <p>Player transfer table (3 rows visible)</p>
+        <div class="ad-banner-placeholder many">
+          <div>SIDE AD</div><div>SIDE AD</div>
+        </div>
+        <p>More content interrupted by</p>
+        <div class="ad-banner-placeholder bad" style="height:36px;">BANNER AD</div>
+      </div>
+    </div>
+    <div class="ad-box good">
+      <div class="ad-header">After — Redesigned layout</div>
+      <div class="ad-body">
+        <p>Full transfer table (5+ rows visible)</p>
+        <p>Market value stats widget</p>
+        <div class="ad-banner-placeholder good" style="height:36px;">Single unobtrusive sponsor unit</div>
+        <p>News ticker &amp; upcoming fixtures</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ RESEARCH ════════════════ -->
+<section>
+  <p class="section-label">03 — Research &amp; Discovery</p>
+  <h2>Listening before designing</h2>
+  <p class="lead">I ran a mixed-methods research sprint to ground every design decision in real user behaviour, not assumptions.</p>
+
+  <div class="two-col" style="margin-bottom:48px;">
+    <div>
+      <h4 style="font-size:16px;font-weight:600;margin-bottom:16px;">Methods used</h4>
+      <div class="process-step" style="padding:14px 0;">
+        <div class="step-num">01</div>
+        <div class="step-content"><h4>Heuristic evaluation</h4><p>Mapped against Nielsen's 10 principles. Found 23 violations — highest severity around error prevention and aesthetic minimalism.</p></div>
+      </div>
+      <div class="process-step" style="padding:14px 0;">
+        <div class="step-num">02</div>
+        <div class="step-content"><h4>User interviews</h4><p>8 participants aged 18–45. Mix of casual fans, scouts, journalists and fantasy football managers. 45-min sessions each.</p></div>
+      </div>
+      <div class="process-step" style="padding:14px 0;">
+        <div class="step-num">03</div>
+        <div class="step-content"><h4>Competitor analysis</h4><p>Benchmarked against Sofascore, FBref, WhoScored and BBC Sport. Identified information architecture patterns that reduce cognitive load.</p></div>
+      </div>
+      <div class="process-step" style="padding:14px 0;border-bottom:none;">
+        <div class="step-num">04</div>
+        <div class="step-content"><h4>Survey (n=156)</h4><p>Quantitative data on feature priorities, session duration, device usage and main frustrations. 68% cited ad distraction as #1 issue.</p></div>
+      </div>
+    </div>
+    <div>
+      <h4 style="font-size:16px;font-weight:600;margin-bottom:16px;">Key insights</h4>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="insight-card">
+          <span class="emoji">🧭</span>
+          <h4>Users scan, not read</h4>
+          <p>Heat maps showed 80% of interactions happened in the top 60% of any page. Below-fold content was consistently ignored.</p>
+        </div>
+        <div class="insight-card">
+          <span class="emoji">📊</span>
+          <h4>Data density ≠ data clarity</h4>
+          <p>Users wanted access to deep stats, but they wanted them on demand — not front-loaded onto every screen simultaneously.</p>
+        </div>
+        <div class="insight-card">
+          <span class="emoji">🏟️</span>
+          <h4>Trust through imagery</h4>
+          <p>Sites with high-quality football photography scored significantly higher on perceived credibility, even when data was identical.</p>
+        </div>
+        <div class="insight-card">
+          <span class="emoji">⚽</span>
+          <h4>Mobile is the match-day device</h4>
+          <p>58% of users primarily accessed Transfermarkt on mobile, especially during live matches and right after transfer announcements.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="user-quote">
+    <div class="quote-mark">"</div>
+    <p>I'd love to just see the transfers without wading through a sea of pop-ups. The information is there — I just can't get to it without feeling attacked by the page.</p>
+    <footer>— Participant 4, 28, Casual fan &amp; fantasy football player</footer>
+  </div>
+</section>
+
+<!-- ════════════════ DESIGN PROCESS ════════════════ -->
+<section class="alt">
+  <p class="section-label">04 — Design Process</p>
+  <h2>From chaos to clarity</h2>
+  <p class="lead">The process followed a double-diamond framework — diverging wide in research and ideation, then converging sharply on the most impactful solutions.</p>
+
+  <div class="timeline" style="max-width:640px;">
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">Week 1–2</div>
+      <div class="timeline-title">Empathise &amp; Define</div>
+      <div class="timeline-body">User interviews, heuristic evaluation, survey distribution. Synthesised findings into 3 core user personas and a prioritised problem list.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">Week 3–4</div>
+      <div class="timeline-title">Information Architecture</div>
+      <div class="timeline-body">Card sorting sessions with 12 participants led to a restructured navigation. Reduced primary nav items from 11 to 7. Created a site map and user flow diagrams.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">Week 5–6</div>
+      <div class="timeline-title">Lo-fi Wireframes</div>
+      <div class="timeline-body">Rapid sketching (80+ concepts) narrowed to 15 digital wireframes in Figma. First usability test round confirmed improved scanability but flagged mobile nav issues.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">Week 7–9</div>
+      <div class="timeline-title">Visual Design System</div>
+      <div class="timeline-body">Built a component library with 40+ elements. Established a refined green palette, typographic scale with DM Sans, and responsive grid system for desktop and mobile.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">Week 10–12</div>
+      <div class="timeline-title">Hi-fi Prototype &amp; Testing</div>
+      <div class="timeline-body">Full interactive prototype tested with 10 participants via Maze. Task completion rate increased from 61% to 89% versus original site. Iterated on 6 components post-testing.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ DESIGN SYSTEM ════════════════ -->
+<section>
+  <p class="section-label">05 — Design System</p>
+  <h2>A coherent visual language</h2>
+  <p class="lead">The new design system is rooted in football — green as the pitch, white as the lines, dark tones for depth at night matches. Every colour choice earns its place.</p>
+
+  <div class="two-col">
+    <div>
+      <h4 style="font-size:16px;font-weight:600;margin-bottom:20px;">Colour palette</h4>
+      <div class="palette-row">
+        <div class="swatch"><div class="swatch-color" style="background:#0F3D1A;"></div><div class="swatch-name">Forest<br/>#0F3D1A</div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#1A6B2E;"></div><div class="swatch-name">Pine<br/>#1A6B2E</div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#27A347;"></div><div class="swatch-name">Pitch<br/>#27A347</div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#4DBD6B;"></div><div class="swatch-name">Grass<br/>#4DBD6B</div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#C8EBD3;"></div><div class="swatch-name">Mint<br/>#C8EBD3</div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#F5F3EE;border:1px solid #E5E1D4;"></div><div class="swatch-name">Sand<br/>#F5F3EE</div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#0F1A0C;"></div><div class="swatch-name">Ink<br/>#0F1A0C</div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#B8860B;"></div><div class="swatch-name">Gold<br/>#B8860B</div></div>
+      </div>
+    </div>
+    <div>
+      <h4 style="font-size:16px;font-weight:600;margin-bottom:20px;">Typography</h4>
+      <div class="type-row">
+        <div class="type-label">Display</div>
+        <div style="font-family:'DM Serif Display',serif;font-size:28px;color:var(--ink);">DM Serif Display</div>
+      </div>
+      <div class="type-row">
+        <div class="type-label">Heading H1</div>
+        <div style="font-size:22px;font-weight:600;color:var(--ink);">Transfer Window</div>
+      </div>
+      <div class="type-row">
+        <div class="type-label">Heading H2</div>
+        <div style="font-size:18px;font-weight:500;color:var(--ink);">Premier League</div>
+      </div>
+      <div class="type-row">
+        <div class="type-label">Body</div>
+        <div style="font-size:16px;color:var(--ink-muted);line-height:1.6;">DM Sans Regular — Player profiles, news articles, table content</div>
+      </div>
+      <div class="type-row">
+        <div class="type-label">Caption</div>
+        <div style="font-size:12px;color:var(--ink-light);letter-spacing:.06em;text-transform:uppercase;">MARKET VALUE · €85.00M</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:48px;">
+    <h4 style="font-size:16px;font-weight:600;margin-bottom:16px;">Accessibility standards</h4>
+    <table>
+      <thead><tr><th>Pair</th><th>Contrast ratio</th><th>WCAG level</th><th>Used for</th></tr></thead>
+      <tbody>
+        <tr><td>Pine on White</td><td>9.4:1</td><td><span class="tag-green">AAA</span></td><td>Body text on light backgrounds</td></tr>
+        <tr><td>White on Forest</td><td>11.2:1</td><td><span class="tag-green">AAA</span></td><td>Navigation bar, hero headers</td></tr>
+        <tr><td>Pitch on Sand</td><td>5.1:1</td><td><span class="tag-green">AA</span></td><td>Accent labels, active states</td></tr>
+        <tr><td>Ink on Mint</td><td>7.8:1</td><td><span class="tag-green">AAA</span></td><td>Callout boxes, highlighted rows</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ════════════════ KEY DESIGN DECISIONS ════════════════ -->
+<section class="alt">
+  <p class="section-label">06 — Key Design Decisions</p>
+  <h2>Why we made each call</h2>
+
+  <div class="three-col">
+    <div class="decision-card">
+      <div class="decision-num">01</div>
+      <h4>Ads moved to sidebar & post-scroll</h4>
+      <p>Banner ads were repositioned out of the primary content stream. One sponsored unit appears below the fold. This reduced bounce rate in usability tests while preserving revenue potential.</p>
+      <span class="decision-tag">Information Architecture</span>
+    </div>
+    <div class="decision-card">
+      <div class="decision-num">02</div>
+      <h4>Forest green nav, sand body</h4>
+      <p>The dark green navigation creates a strong visual anchor. The warm sand background reduces eye strain on data-heavy pages compared to pure white, based on user testing feedback.</p>
+      <span class="decision-tag">Visual Design</span>
+    </div>
+    <div class="decision-card">
+      <div class="decision-num">03</div>
+      <h4>Progressive disclosure for stats</h4>
+      <p>Deep statistics are one tap/click away but not front-loaded. Players see a clean card with key numbers; power users can expand into the full data table. Reduces overwhelm for casual fans.</p>
+      <span class="decision-tag">Interaction Design</span>
+    </div>
+    <div class="decision-card">
+      <div class="decision-num">04</div>
+      <h4>Sticky bottom nav on mobile</h4>
+      <p>A persistent four-item bottom navigation bar (Home, Transfers, Search, Profile) keeps core actions always reachable with the thumb. Mirrors native app conventions users already know.</p>
+      <span class="decision-tag">Mobile UX</span>
+    </div>
+    <div class="decision-card">
+      <div class="decision-num">05</div>
+      <h4>News ticker as scoped feed</h4>
+      <p>The news ticker was redesigned as a filterable, categorised feed. Users can toggle between Transfer Rumours, Confirmed Deals, and Match Reports — reducing irrelevant content noise.</p>
+      <span class="decision-tag">Content Strategy</span>
+    </div>
+    <div class="decision-card">
+      <div class="decision-num">06</div>
+      <h4>Imagery as a first-class element</h4>
+      <p>High-quality match photography was introduced in hero areas and article previews. Research showed trust and perceived quality scores increased significantly when imagery matched the content tone.</p>
+      <span class="decision-tag">Visual Design</span>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ BEFORE vs AFTER ════════════════ -->
+<section>
+  <p class="section-label">07 — Before &amp; After</p>
+  <h2>The transformation</h2>
+
+  <div class="ba-grid">
+    <div class="ba-panel before">
+      <span class="ba-label">Before</span>
+      <div class="ba-item"><div class="ba-dot"></div><p>5–7 ad units visible above the fold simultaneously</p></div>
+      <div class="ba-item"><div class="ba-dot"></div><p>Tables overflow horizontally on mobile with no scroll affordance</p></div>
+      <div class="ba-item"><div class="ba-dot"></div><p>Navigation with 11 items, flat hierarchy, poor contrast</p></div>
+      <div class="ba-item"><div class="ba-dot"></div><p>Pure white background with aggressive visual noise from competing elements</p></div>
+      <div class="ba-item"><div class="ba-dot"></div><p>Player cards: dense blocks of text with no breathing room</p></div>
+      <div class="ba-item"><div class="ba-dot"></div><p>No imagery — data presented as pure numbers in a dated table style</p></div>
+      <div class="ba-item"><div class="ba-dot"></div><p>61% task completion in usability testing</p></div>
+    </div>
+    <div class="ba-panel after">
+      <span class="ba-label">After</span>
+      <div class="ba-item"><div class="ba-dot"></div><p>Single unobtrusive sponsor unit, positioned below primary content</p></div>
+      <div class="ba-item"><div class="ba-dot"></div><p>Responsive card system adapts fluidly from 1440px desktop to 375px mobile</p></div>
+      <div class="ba-item"><div class="ba-dot"></div><p>7-item navigation with clear active states, grouped into logical categories</p></div>
+      <div class="ba-item"><div class="ba-dot"></div><p>Warm sand background reduces eye fatigue; green accents guide attention</p></div>
+      <div class="ba-item"><div class="ba-dot"></div><p>Cards use generous padding, colour-coded position badges, and micro-typography</p></div>
+      <div class="ba-item"><div class="ba-dot"></div><p>Photography hero areas and club imagery create premium, editorial feel</p></div>
+      <div class="ba-item"><div class="ba-dot"></div><p>89% task completion — +28pp improvement in usability testing</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ DESKTOP MOCKUP ════════════════ -->
+<section class="alt">
+  <p class="section-label">08 — Desktop Mockup</p>
+  <h2>Homepage — Redesigned</h2>
+  <p class="lead">The desktop experience leads with the transfer highlights carousel, prioritises live data in the sidebar, and anchors everything in the new green navigation system.</p>
+
+  <div class="browser-frame">
+    <div class="browser-bar">
+      <div class="browser-dots">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="browser-url">transfermarkt.com</div>
+    </div>
+    <div class="browser-content">
+      <!-- Nav -->
+      <div class="mock-nav">
+        <div class="mock-logo">Transfermarkt</div>
+        <div class="mock-nav-links">
+          <span class="mock-nav-link active">Transfers</span>
+          <span class="mock-nav-link">Players</span>
+          <span class="mock-nav-link">Clubs</span>
+          <span class="mock-nav-link">Competitions</span>
+          <span class="mock-nav-link">Stats</span>
+        </div>
+        <div style="width:120px; height:28px; background:rgba(255,255,255,.15); border-radius:6px; display:flex; align-items:center; padding:0 10px;">
+          <span style="font-size:11px; color:rgba(255,255,255,.6);">🔍 Search...</span>
+        </div>
+      </div>
+      <div class="mock-subnav">
+        <span class="active">Latest</span>
+        <span>Rumours</span>
+        <span>Market Values</span>
+        <span>Statistics</span>
+        <span>News</span>
+      </div>
+      <!-- Hero content -->
+      <div class="mock-hero">
+        <div class="mock-hero-main">
+          <div class="mock-news-ticker">
+            <span class="ticker-tag">Live</span>
+            <span style="font-size:12px;opacity:.8;">Mbappé linked with shock return to Monaco · PSG complete €45m signing · Premier League deadline day recap</span>
+          </div>
+          <div class="mock-card-big">
+            <div class="mock-card-img">
+              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(10,43,18,.9) 0%,transparent 60%);"></div>
+              <div style="position:absolute;bottom:14px;left:16px;">
+                <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4DBD6B;margin-bottom:4px;">Transfer Confirmed</div>
+                <div style="font-size:16px;font-weight:600;color:white;line-height:1.3;">Premier League's top-10 winter<br/>transfer window moves</div>
+                <div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:4px;">Updated · 2 hours ago</div>
+              </div>
+            </div>
+            <div class="mock-card-body">
+              <div style="display:flex;gap:16px;margin-bottom:12px;">
+                <div style="flex:1;background:var(--sand-50);border-radius:8px;padding:10px 12px;">
+                  <div style="font-size:10px;color:var(--ink-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px;">Total spent</div>
+                  <div style="font-size:16px;font-weight:600;color:var(--ink);">€1.24bn</div>
+                </div>
+                <div style="flex:1;background:var(--sand-50);border-radius:8px;padding:10px 12px;">
+                  <div style="font-size:10px;color:var(--ink-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px;">Confirmed deals</div>
+                  <div style="font-size:16px;font-weight:600;color:var(--ink);">482</div>
+                </div>
+                <div style="flex:1;background:var(--green-50);border-radius:8px;padding:10px 12px;">
+                  <div style="font-size:10px;color:var(--green-700);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px;">Most valuable</div>
+                  <div style="font-size:16px;font-weight:600;color:var(--green-700);">PL €12.58bn</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Sidebar -->
+        <div class="mock-sidebar">
+          <div class="mock-sidebar-card">
+            <div class="mock-sidebar-label">
+              <span style="width:8px;height:8px;border-radius:50%;background:var(--green-400);display:inline-block;"></span>
+              Latest Transfers
+            </div>
+            <div class="mock-transfer-row">
+              <div class="mock-player-dot"></div>
+              <div class="mock-player-info">
+                <div class="mock-player-name">J. Sancho</div>
+                <div class="mock-player-clubs">Aston Villa → Dortmund</div>
+              </div>
+              <div class="mock-fee">Loan</div>
+            </div>
+            <div class="mock-transfer-row">
+              <div class="mock-player-dot" style="background:var(--green-50);"></div>
+              <div class="mock-player-info">
+                <div class="mock-player-name">C. Palmer</div>
+                <div class="mock-player-clubs">Chelsea FC</div>
+              </div>
+              <div class="mock-fee">+€25m</div>
+            </div>
+            <div class="mock-transfer-row">
+              <div class="mock-player-dot" style="background:var(--sand-100);"></div>
+              <div class="mock-player-info">
+                <div class="mock-player-name">W. Mikelbrencis</div>
+                <div class="mock-player-clubs">Hamburg → Lens</div>
+              </div>
+              <div class="mock-fee">€8m</div>
+            </div>
+          </div>
+          <div class="mock-sidebar-card">
+            <div class="mock-sidebar-label">Top Rumours</div>
+            <div style="font-size:12px;color:var(--ink-muted);padding:8px 0;border-bottom:1px solid var(--sand-50);">Mbappé — Monaco (58% confidence)</div>
+            <div style="font-size:12px;color:var(--ink-muted);padding:8px 0;">De Bruyne — MLS interest (42%)</div>
+          </div>
+        </div>
+      </div>
+      <!-- Stats row -->
+      <div class="mock-stats-row">
+        <div class="mock-stat-item">
+          <div class="mock-stat-num">€12.58bn</div>
+          <div class="mock-stat-label">Most Valuable League</div>
+        </div>
+        <div class="mock-stat-item">
+          <div class="mock-stat-num">€1.36bn</div>
+          <div class="mock-stat-label">Most Valuable Club</div>
+        </div>
+        <div class="mock-stat-item">
+          <div class="mock-stat-num">482</div>
+          <div class="mock-stat-label">Transfers This Window</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ CLUB PAGE MOCKUP ════════════════ -->
+<section>
+  <p class="section-label">08b — Desktop Mockup</p>
+  <h2>Club page — FC Barcelona</h2>
+  <p class="lead">The club page organises squad, fixtures, trophies and transfer history in a clear, tabbed layout. Above-the-fold shows only the essential at-a-glance data.</p>
+
+  <div class="browser-frame">
+    <div class="browser-bar">
+      <div class="browser-dots"><span></span><span></span><span></span></div>
+      <div class="browser-url">transfermarkt.com/fc-barcelona</div>
+    </div>
+    <div class="browser-content">
+      <div class="mock-nav" style="background:var(--green-900);">
+        <div class="mock-logo">Transfermarkt</div>
+        <div class="mock-nav-links">
+          <span class="mock-nav-link">Transfers</span>
+          <span class="mock-nav-link active">Clubs</span>
+          <span class="mock-nav-link">Players</span>
+          <span class="mock-nav-link">Competitions</span>
+          <span class="mock-nav-link">Stats</span>
+        </div>
+        <div style="width:120px;height:28px;background:rgba(255,255,255,.1);border-radius:6px;display:flex;align-items:center;padding:0 10px;">
+          <span style="font-size:11px;color:rgba(255,255,255,.5);">🔍 Search...</span>
+        </div>
+      </div>
+      <!-- Club hero header -->
+      <div style="background:linear-gradient(135deg,#0c2340,#1a4a8a);padding:28px 40px;display:flex;justify-content:space-between;align-items:flex-end;">
+        <div style="display:flex;gap:20px;align-items:flex-end;">
+          <div style="width:80px;height:80px;background:rgba(255,255,255,.15);border-radius:14px;border:2px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:white;">B</div>
+          <div>
+            <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:4px;">LaLiga · Rank #1</div>
+            <div style="font-family:'DM Serif Display',serif;font-size:32px;color:white;line-height:1.1;">FC Barcelona</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;">
+          <div style="text-align:right;">
+            <div style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:2px;">Total Market Value</div>
+            <div style="font-family:'DM Serif Display',serif;font-size:28px;color:#4DBD6B;">€1.11bn</div>
+          </div>
+        </div>
+      </div>
+      <!-- Sub-nav tabs -->
+      <div style="background:white;border-bottom:1px solid var(--sand-100);padding:0 40px;display:flex;gap:28px;">
+        <div style="padding:12px 0;font-size:13px;font-weight:600;color:var(--green-600);border-bottom:2px solid var(--green-500);">Squad</div>
+        <div style="padding:12px 0;font-size:13px;color:var(--ink-light);">Fixtures</div>
+        <div style="padding:12px 0;font-size:13px;color:var(--ink-light);">Transfers</div>
+        <div style="padding:12px 0;font-size:13px;color:var(--ink-light);">Statistics</div>
+        <div style="padding:12px 0;font-size:13px;color:var(--ink-light);">Trophies</div>
+      </div>
+      <!-- Squad preview -->
+      <div style="padding:24px 40px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <div style="font-size:14px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);">Squad 2025/26</div>
+          <div style="font-size:12px;color:var(--green-600);font-weight:500;">25 players · Avg age 25.7</div>
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;">
+          <thead><tr style="background:var(--sand-50);">
+            <th style="padding:8px 12px;text-align:left;font-weight:600;font-size:11px;color:var(--ink-light);text-transform:uppercase;">Player</th>
+            <th style="padding:8px 12px;text-align:left;font-weight:600;font-size:11px;color:var(--ink-light);text-transform:uppercase;">Position</th>
+            <th style="padding:8px 12px;text-align:left;font-weight:600;font-size:11px;color:var(--ink-light);text-transform:uppercase;">Age</th>
+            <th style="padding:8px 12px;text-align:right;font-weight:600;font-size:11px;color:var(--ink-light);text-transform:uppercase;">Market Value</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--sand-50);">
+              <td style="padding:10px 12px;font-weight:500;">Marc-André ter Stegen</td>
+              <td style="padding:10px 12px;"><span style="background:var(--sand-100);color:var(--ink-light);font-size:10px;padding:3px 8px;border-radius:100px;">GK</span></td>
+              <td style="padding:10px 12px;color:var(--ink-light);">33</td>
+              <td style="padding:10px 12px;text-align:right;font-weight:600;color:var(--green-700);">€8.00m</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--sand-50);background:var(--green-50);">
+              <td style="padding:10px 12px;font-weight:600;color:var(--green-800);">Lamine Yamal</td>
+              <td style="padding:10px 12px;"><span style="background:var(--green-100);color:var(--green-700);font-size:10px;padding:3px 8px;border-radius:100px;">RW</span></td>
+              <td style="padding:10px 12px;color:var(--ink-light);">17</td>
+              <td style="padding:10px 12px;text-align:right;font-weight:700;color:var(--green-700);">€250.00m</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--sand-50);">
+              <td style="padding:10px 12px;font-weight:500;">Pedri</td>
+              <td style="padding:10px 12px;"><span style="background:var(--sand-100);color:var(--ink-light);font-size:10px;padding:3px 8px;border-radius:100px;">CM</span></td>
+              <td style="padding:10px 12px;color:var(--ink-light);">22</td>
+              <td style="padding:10px 12px;text-align:right;font-weight:600;color:var(--green-700);">€120.00m</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ MOBILE MOCKUPS ════════════════ -->
+<section class="dark">
+  <p class="section-label">09 — Mobile Mockups</p>
+  <h2>Designed for the stadium &amp; the sofa</h2>
+  <p class="lead">The mobile experience was built mobile-first — thumb-friendly navigation, swipeable cards, and progressive disclosure that respects the small screen.</p>
+
+  <div class="phones-row">
+
+    <!-- Phone 1: Home -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="mob-topbar">
+            <div class="mob-logo">Transfermarkt</div>
+            <div style="display:flex;gap:8px;">
+              <div class="mob-search" style="font-size:12px;color:rgba(255,255,255,.7);">🔍</div>
+              <div class="mob-search" style="font-size:12px;color:rgba(255,255,255,.7);">☰</div>
+            </div>
+          </div>
+          <div class="mob-hero-banner">
+            <div class="mob-hero-tag">Transfer Window · Live</div>
+            <div class="mob-hero-title">482 confirmed deals<br/>this window</div>
+            <div class="mob-hero-sub">Premier League leads spending</div>
+          </div>
+          <!-- Quick stats -->
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:10px 12px;background:var(--sand-50);">
+            <div style="text-align:center;"><div style="font-size:13px;font-weight:700;color:var(--ink);">€1.24bn</div><div style="font-size:9px;color:var(--ink-light);">Total Spent</div></div>
+            <div style="text-align:center;"><div style="font-size:13px;font-weight:700;color:var(--ink);">482</div><div style="font-size:9px;color:var(--ink-light);">Deals</div></div>
+            <div style="text-align:center;"><div style="font-size:13px;font-weight:700;color:var(--green-600);">#1 PL</div><div style="font-size:9px;color:var(--ink-light);">Top League</div></div>
+          </div>
+          <div class="mob-section-head">Latest Transfers <span>See all</span></div>
+          <div class="mob-transfer-item">
+            <div class="mob-player-avatar">JS</div>
+            <div class="mob-player-details">
+              <div class="mob-player-nm">Jadon Sancho</div>
+              <div class="mob-player-clubs">Aston Villa → Dortmund</div>
+            </div>
+            <div class="mob-player-fee">Loan</div>
+          </div>
+          <div class="mob-transfer-item">
+            <div class="mob-player-avatar" style="background:var(--green-100);color:var(--green-700);">WM</div>
+            <div class="mob-player-details">
+              <div class="mob-player-nm">W. Mikelbrencis</div>
+              <div class="mob-player-clubs">Hamburg → Lens</div>
+            </div>
+            <div class="mob-player-fee">€8m</div>
+          </div>
+          <div class="mob-transfer-item">
+            <div class="mob-player-avatar" style="background:var(--sand-100);color:var(--ink-light);">CP</div>
+            <div class="mob-player-details">
+              <div class="mob-player-nm">Cole Palmer</div>
+              <div class="mob-player-clubs">Chelsea FC · +€25m</div>
+            </div>
+            <div class="mob-player-fee" style="color:var(--green-600);">▲ val</div>
+          </div>
+          <div style="flex:1;"></div>
+          <div class="mob-bottom-nav">
+            <div class="mob-nav-item"><div class="mob-nav-dot active"></div><div class="mob-nav-label active">Home</div></div>
+            <div class="mob-nav-item"><div class="mob-nav-dot"></div><div class="mob-nav-label">Transfers</div></div>
+            <div class="mob-nav-item"><div class="mob-nav-dot"></div><div class="mob-nav-label">Search</div></div>
+            <div class="mob-nav-item"><div class="mob-nav-dot"></div><div class="mob-nav-label">Profile</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-screen-label" style="color:var(--green-200);">Homepage</div>
+    </div>
+
+    <!-- Phone 2: Player profile -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:32px;">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="mob-profile-hero">
+            <div class="mob-back">← Back to squad</div>
+            <div class="mob-player-row">
+              <div class="mob-player-pic">LY</div>
+              <div class="mob-player-meta">
+                <div class="mob-player-fullname">Lamine Yamal</div>
+                <div class="mob-player-pos">Right Winger · FC Barcelona</div>
+                <div class="mob-value-pill">
+                  <span>Market Value</span>
+                  <strong>€250m</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Stats grid -->
+          <div class="mob-stats-grid">
+            <div class="mob-stat-box"><div class="n">17</div><div class="l">Age</div></div>
+            <div class="mob-stat-box"><div class="n">8</div><div class="l">Goals</div></div>
+            <div class="mob-stat-box"><div class="n">12</div><div class="l">Assists</div></div>
+            <div class="mob-stat-box"><div class="n">28</div><div class="l">Apps</div></div>
+            <div class="mob-stat-box"><div class="n">94</div><div class="l">Dribbles</div></div>
+            <div class="mob-stat-box" style="background:var(--green-50);"><div class="n" style="color:var(--green-700);">#7</div><div class="l">Kit</div></div>
+          </div>
+          <!-- Tabs -->
+          <div style="display:flex;border-bottom:1px solid var(--sand-100);padding:0 14px;">
+            <div style="padding:8px 12px;font-size:11px;font-weight:600;color:var(--green-600);border-bottom:2px solid var(--green-500);">History</div>
+            <div style="padding:8px 12px;font-size:11px;color:var(--ink-light);">Stats</div>
+            <div style="padding:8px 12px;font-size:11px;color:var(--ink-light);">Transfers</div>
+          </div>
+          <div class="mob-history-section">
+            <div style="padding-top:10px;"></div>
+            <div class="mob-history-row">
+              <div class="mob-club-badge">B</div>
+              <div class="mob-club-info"><div class="mob-club-nm">FC Barcelona</div><div class="mob-club-years">2024 – present</div></div>
+              <div class="mob-club-fee">€12m</div>
+            </div>
+            <div class="mob-history-row">
+              <div class="mob-club-badge" style="background:var(--sand-100);">B</div>
+              <div class="mob-club-info"><div class="mob-club-nm">Barça Academy</div><div class="mob-club-years">2019 – 2024</div></div>
+              <div class="mob-club-fee" style="color:var(--ink-light);">Youth</div>
+            </div>
+          </div>
+          <div class="mob-bottom-nav">
+            <div class="mob-nav-item"><div class="mob-nav-dot"></div><div class="mob-nav-label">Home</div></div>
+            <div class="mob-nav-item"><div class="mob-nav-dot"></div><div class="mob-nav-label">Transfers</div></div>
+            <div class="mob-nav-item"><div class="mob-nav-dot"></div><div class="mob-nav-label">Search</div></div>
+            <div class="mob-nav-item"><div class="mob-nav-dot active"></div><div class="mob-nav-label active">Profile</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-screen-label" style="color:var(--green-200);">Player Profile</div>
+    </div>
+
+    <!-- Phone 3: Transfers list -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="mob-topbar">
+            <div style="font-size:14px;font-weight:600;color:white;">Transfers</div>
+            <div class="mob-search" style="font-size:12px;color:rgba(255,255,255,.7);">⚙</div>
+          </div>
+          <!-- Filter chips -->
+          <div style="padding:10px 12px;display:flex;gap:6px;overflow-x:auto;background:var(--sand-50);">
+            <span style="background:var(--green-600);color:white;font-size:10px;padding:4px 10px;border-radius:100px;white-space:nowrap;font-weight:500;">All</span>
+            <span style="background:white;color:var(--ink-muted);font-size:10px;padding:4px 10px;border-radius:100px;border:1px solid var(--sand-200);white-space:nowrap;">PL</span>
+            <span style="background:white;color:var(--ink-muted);font-size:10px;padding:4px 10px;border-radius:100px;border:1px solid var(--sand-200);white-space:nowrap;">LaLiga</span>
+            <span style="background:white;color:var(--ink-muted);font-size:10px;padding:4px 10px;border-radius:100px;border:1px solid var(--sand-200);white-space:nowrap;">Bundesliga</span>
+          </div>
+          <!-- Section: Latest -->
+          <div class="mob-section-head" style="padding-top:12px;">Latest <span>Filter</span></div>
+          <div class="mob-transfer-item">
+            <div class="mob-player-avatar">JS</div>
+            <div class="mob-player-details"><div class="mob-player-nm">Jadon Sancho</div><div class="mob-player-clubs">Aston Villa → Dortmund</div></div>
+            <div><div style="font-size:9px;color:var(--ink-light);text-align:right;">Left Winger</div><div class="mob-player-fee">Loan</div></div>
+          </div>
+          <div class="mob-transfer-item">
+            <div class="mob-player-avatar" style="background:var(--sand-100);color:var(--ink-light);">RN</div>
+            <div class="mob-player-details"><div class="mob-player-nm">R. Neves</div><div class="mob-player-clubs">Al-Hilal → unknown</div></div>
+            <div><div style="font-size:9px;color:var(--ink-light);text-align:right;">CM</div><div class="mob-player-fee">?</div></div>
+          </div>
+          <div class="mob-section-head" style="padding-top:4px;">Top Winter Deals <span>See all</span></div>
+          <div class="mob-transfer-item">
+            <div class="mob-player-avatar" style="background:var(--green-100);color:var(--green-700);">LY</div>
+            <div class="mob-player-details"><div class="mob-player-nm">Lamine Yamal</div><div class="mob-player-clubs">Barcelona · Right Winger</div></div>
+            <div class="mob-player-fee">€72m</div>
+          </div>
+          <div class="mob-transfer-item">
+            <div class="mob-player-avatar" style="background:var(--green-50);color:var(--green-600);">VJ</div>
+            <div class="mob-player-details"><div class="mob-player-nm">V. Júnior</div><div class="mob-player-clubs">Real Madrid · LW</div></div>
+            <div class="mob-player-fee">€40m</div>
+          </div>
+          <div style="flex:1;"></div>
+          <div class="mob-bottom-nav">
+            <div class="mob-nav-item"><div class="mob-nav-dot"></div><div class="mob-nav-label">Home</div></div>
+            <div class="mob-nav-item"><div class="mob-nav-dot active"></div><div class="mob-nav-label active">Transfers</div></div>
+            <div class="mob-nav-item"><div class="mob-nav-dot"></div><div class="mob-nav-label">Search</div></div>
+            <div class="mob-nav-item"><div class="mob-nav-dot"></div><div class="mob-nav-label">Profile</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-screen-label" style="color:var(--green-200);">Transfer List</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════ USABILITY TESTING ════════════════ -->
+<section class="alt">
+  <p class="section-label">10 — Usability Testing</p>
+  <h2>Validated with real users</h2>
+  <p class="lead">Two rounds of testing — one after lo-fi wireframes, one after the hi-fi prototype — shaped every major design decision in this project.</p>
+
+  <div class="two-col">
+    <div>
+      <h4 style="font-size:16px;font-weight:600;margin-bottom:20px;">Test parameters</h4>
+      <table>
+        <thead><tr><th>Parameter</th><th>Details</th></tr></thead>
+        <tbody>
+          <tr><td>Participants</td><td>10 (Round 1: 8, Round 2: 10)</td></tr>
+          <tr><td>Method</td><td>Moderated remote — Maze + Zoom</td></tr>
+          <tr><td>Tasks</td><td>6 core user journeys</td></tr>
+          <tr><td>Device split</td><td>60% mobile, 40% desktop</td></tr>
+          <tr><td>Age range</td><td>18–45</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h4 style="font-size:16px;font-weight:600;margin-bottom:20px;">Key tasks tested</h4>
+      <table>
+        <thead><tr><th>Task</th><th>Before</th><th>After</th></tr></thead>
+        <tbody>
+          <tr><td>Find a player's market value</td><td><span class="tag-red">61%</span></td><td><span class="tag-green">94%</span></td></tr>
+          <tr><td>View latest transfers</td><td><span class="tag-red">72%</span></td><td><span class="tag-green">96%</span></td></tr>
+          <tr><td>Navigate to a club's squad</td><td><span class="tag-red">55%</span></td><td><span class="tag-green">91%</span></td></tr>
+          <tr><td>Find league standings</td><td><span class="tag-red">48%</span></td><td><span class="tag-green">88%</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ IMPACT ════════════════ -->
+<section>
+  <p class="section-label">11 — Projected Impact</p>
+  <h2>Results &amp; what this means</h2>
+  <p class="lead">Based on usability test data and benchmarking against competitor site performance, the redesign positions Transfermarkt to meaningfully close the gap to the global top 3.</p>
+
+  <div class="four-col">
+    <div class="impact-card">
+      <div class="big-num">+28pp</div>
+      <div class="metric-label">Task completion rate</div>
+      <div class="metric-note">61% → 89% across 6 core user journeys in moderated testing</div>
+    </div>
+    <div class="impact-card">
+      <div class="big-num">−67%</div>
+      <div class="metric-label">Ad density reduction</div>
+      <div class="metric-note">From 6 average ad units per screen to 2 unobtrusive placements</div>
+    </div>
+    <div class="impact-card">
+      <div class="big-num">4.6/5</div>
+      <div class="metric-label">Post-test satisfaction</div>
+      <div class="metric-note">Average System Usability Scale score vs 2.9/5 for the original site</div>
+    </div>
+    <div class="impact-card">
+      <div class="big-num">Top 3</div>
+      <div class="metric-label">Target ranking</div>
+      <div class="metric-note">Competitive positioning analysis shows this UX gap is the primary differentiator</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ REFLECTION ════════════════ -->
+<section class="alt">
+  <p class="section-label">12 — Reflection</p>
+  <h2>What I learned</h2>
+
+  <div class="two-col">
+    <div>
+      <p>This project reinforced something I believe deeply: <strong>data-rich platforms don't need to be visually overwhelming</strong>. The challenge was not to remove information — Transfermarkt's value is its depth — but to make every piece of information earnable. Progressive disclosure was the key.</p>
+      <p>Working on a product used by millions of football fans also reminded me that design decisions carry real stakes. The ad reduction strategy required understanding both the user's needs and the product's business model. A design that doesn't work commercially isn't a good design.</p>
+      <p>If I were to continue this project, I would run a full A/B test on the ad placement strategy to validate revenue-neutral impact, conduct accessibility testing with screen-reader users, and prototype a personalised home feed based on favourite teams.</p>
+    </div>
+    <div>
+      <h4 style="font-size:16px;font-weight:600;margin-bottom:20px;">If I had more time</h4>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--green-400);flex-shrink:0;margin-top:6px;"></div>
+          <div><strong style="font-size:14px;">Personalised feed</strong><p style="font-size:14px;margin:4px 0 0;color:var(--ink-light);">A home feed filtered by favourite clubs and competitions would dramatically increase daily return rates.</p></div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--green-400);flex-shrink:0;margin-top:6px;"></div>
+          <div><strong style="font-size:14px;">Native mobile app</strong><p style="font-size:14px;margin:4px 0 0;color:var(--ink-light);">Given that 58% of users are on mobile, a dedicated app with push notifications for transfer alerts would be high-impact.</p></div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--green-400);flex-shrink:0;margin-top:6px;"></div>
+          <div><strong style="font-size:14px;">A/B test ad variants</strong><p style="font-size:14px;margin:4px 0 0;color:var(--ink-light);">Validate that the new ad placement maintains revenue while improving engagement — the business case for the redesign.</p></div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--green-400);flex-shrink:0;margin-top:6px;"></div>
+          <div><strong style="font-size:14px;">Dark mode</strong><p style="font-size:14px;margin:4px 0 0;color:var(--ink-light);">A dark theme using the deep forest green palette would serve the large cohort of evening / match-day users.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ OUTRO ════════════════ -->
+<div class="outro">
+  <p class="section-label" style="justify-content:center;display:flex;">Portfolio</p>
+  <h2>Designed with care.<br/>Built for football.</h2>
+  <p class="lead">This case study demonstrates a full UX process — from research through to tested, production-ready design. The goal was not just to make Transfermarkt prettier, but meaningfully more useful.</p>
+  <div>
+    <span class="outro-pill">UX Research</span>
+    <span class="outro-pill">Interaction Design</span>
+    <span class="outro-pill">Visual Design</span>
+    <span class="outro-pill">Usability Testing</span>
+    <span class="outro-pill">Design Systems</span>
+    <span class="outro-pill">Responsive Design</span>
+  </div>
+  <div style="margin-top:48px;padding-top:32px;border-top:1px solid rgba(255,255,255,.1);">
+    <p style="color:rgba(255,255,255,.4);font-size:13px;margin:0;text-align:center;">© 2026 · Veronica Madorini · UI / UX Designer · madorinidesign@gmail.com</p>
+  </div>
+</div>
+
+</body>
+</html>

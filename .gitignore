@@ -18,7 +18,6 @@ build/
 *_frames*/
 scratch/
 *.py
-assets/
 
 # OS & IDE Files
 .DS_Store
