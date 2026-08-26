@@ -24,7 +24,6 @@ body {
     overflow-x: hidden;
     touch-action: pan-y pinch-zoom;
 }
-}
 
 .home-page { 
     position: relative; 
@@ -972,6 +971,8 @@ body {
     margin: 0;
     max-width: 500px;
 }
+
+.breathe-mockup-card-inner {
     width: 100%;
     height: 100%;
     background: #B0D0E4;
@@ -2365,7 +2366,6 @@ iframe[src*="open.spotify.com"],
     }
     .project-overlay-live-btn {
         font-size: 13px !important;
-    }
     }
 }
 
