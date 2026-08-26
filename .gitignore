@@ -16,6 +16,7 @@ build/
 /*.gif
 /*.webm
 *_frames*/
+scratch
 scratch/
 *.py
 
