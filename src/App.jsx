@@ -1179,6 +1179,15 @@ export default function App() {
         setHoverLabel(null);
     }, []);
 
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            if ("scrollRestoration" in window.history) {
+                window.history.scrollRestoration = "manual";
+            }
+            window.scrollTo(0, 0);
+        }
+    }, []);
+
     const getClientCoords = (e) => {
         if (e.touches && e.touches.length > 0) {
             return { clientX: e.touches[0].clientX, clientY: e.touches[0].clientY };
@@ -1218,14 +1227,9 @@ export default function App() {
                 minY: -elemTop - padY,
                 maxY: heroRect.height - elemTop - elemHeight + padY,
                 moved: false,
+                isDragging: false,
                 maxDist: 0,
             };
-            setActiveDragIndex(index);
-            if (event.pointerId !== undefined && event.currentTarget.setPointerCapture) {
-                try {
-                    event.currentTarget.setPointerCapture(event.pointerId);
-                } catch (e) {}
-            }
         },
         [positions]
     );
@@ -1240,15 +1244,22 @@ export default function App() {
         const dist = Math.hypot(dx, dy);
         meta.maxDist = Math.max(meta.maxDist || 0, dist);
 
-        if (dist > (DRAG_IMAGES[meta.index]?.isVinylPlayer ? 6 : 2)) {
-            meta.moved = true;
+        if (!meta.isDragging) {
+            const threshold = DRAG_IMAGES[meta.index]?.isVinylPlayer ? 8 : 6;
+            if (dist > threshold) {
+                meta.isDragging = true;
+                meta.moved = true;
+                setActiveDragIndex(meta.index);
+            } else {
+                return;
+            }
         }
 
         if (rafIdRef.current) return;
 
         rafIdRef.current = requestAnimationFrame(() => {
             rafIdRef.current = null;
-            if (!dragMetaRef.current) return;
+            if (!dragMetaRef.current || !dragMetaRef.current.isDragging) return;
             setPositions((prev) =>
                 prev.map((pos, idx) =>
                     idx === meta.index
@@ -1276,31 +1287,28 @@ export default function App() {
     }, [togglePlay]);
 
     useEffect(() => {
-        if (activeDragIndex !== null && typeof window !== "undefined") {
-            const handleTouchMove = (e) => {
-                if (dragMetaRef.current && e.cancelable) {
-                    e.preventDefault();
-                }
-            };
+        const handleTouchMove = (e) => {
+            if (dragMetaRef.current && dragMetaRef.current.isDragging && e.cancelable) {
+                e.preventDefault();
+            }
+        };
 
-            window.addEventListener("pointermove", onPointerMove);
-            window.addEventListener("pointerup", onPointerUp);
-            window.addEventListener("pointercancel", onPointerUp);
-            window.addEventListener("touchmove", handleTouchMove, { passive: false });
-            window.addEventListener("touchend", onPointerUp);
-            window.addEventListener("touchcancel", onPointerUp);
+        window.addEventListener("pointermove", onPointerMove);
+        window.addEventListener("pointerup", onPointerUp);
+        window.addEventListener("pointercancel", onPointerUp);
+        window.addEventListener("touchmove", handleTouchMove, { passive: false });
+        window.addEventListener("touchend", onPointerUp);
+        window.addEventListener("touchcancel", onPointerUp);
 
-            return () => {
-                window.removeEventListener("pointermove", onPointerMove);
-                window.removeEventListener("pointerup", onPointerUp);
-                window.removeEventListener("pointercancel", onPointerUp);
-                window.removeEventListener("touchmove", handleTouchMove);
-                window.removeEventListener("touchend", onPointerUp);
-                window.removeEventListener("touchcancel", onPointerUp);
-            };
-        }
-        return undefined;
-    }, [activeDragIndex, onPointerMove, onPointerUp]);
+        return () => {
+            window.removeEventListener("pointermove", onPointerMove);
+            window.removeEventListener("pointerup", onPointerUp);
+            window.removeEventListener("pointercancel", onPointerUp);
+            window.removeEventListener("touchmove", handleTouchMove);
+            window.removeEventListener("touchend", onPointerUp);
+            window.removeEventListener("touchcancel", onPointerUp);
+        };
+    }, [onPointerMove, onPointerUp]);
 
     const handleSmoothScroll = useCallback((e, targetId) => {
         e.preventDefault();
