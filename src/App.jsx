@@ -1161,10 +1161,7 @@ export default function App() {
     }, []);
 
     const handleImagePointerMove = useCallback((event, label) => {
-        if (dragMetaRef.current || activeDragIndex !== null) {
-            setHoverLabel(null);
-            return;
-        }
+        if (dragMetaRef.current && dragMetaRef.current.isDragging) return;
         const winWidth = typeof window !== "undefined" ? window.innerWidth : 1200;
         const winHeight = typeof window !== "undefined" ? window.innerHeight : 800;
 
@@ -1173,10 +1170,12 @@ export default function App() {
             y: clamp(event.clientY, 10, winHeight - 60),
             text: label,
         });
-    }, [activeDragIndex]);
+    }, []);
 
     const handleImagePointerLeave = useCallback(() => {
-        setHoverLabel(null);
+        if (!dragMetaRef.current || !dragMetaRef.current.isDragging) {
+            setHoverLabel(null);
+        }
     }, []);
 
     useEffect(() => {
@@ -1255,6 +1254,18 @@ export default function App() {
             }
         }
 
+        // Show floating tooltip label while dragging on mobile/touch/desktop
+        const currentItem = DRAG_IMAGES[meta.index];
+        if (currentItem && currentItem.label && !currentItem.isVinylPlayer) {
+            const winWidth = typeof window !== "undefined" ? window.innerWidth : 1200;
+            const winHeight = typeof window !== "undefined" ? window.innerHeight : 800;
+            setHoverLabel({
+                x: clamp(coords.clientX, 10, winWidth - 120),
+                y: clamp(coords.clientY, 10, winHeight - 60),
+                text: currentItem.label,
+            });
+        }
+
         if (rafIdRef.current) return;
 
         rafIdRef.current = requestAnimationFrame(() => {
@@ -1280,6 +1291,7 @@ export default function App() {
         }
         dragMetaRef.current = null;
         setActiveDragIndex(null);
+        setHoverLabel(null);
         if (rafIdRef.current) {
             cancelAnimationFrame(rafIdRef.current);
             rafIdRef.current = null;
@@ -1348,14 +1360,13 @@ export default function App() {
                 const winHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
                 const labelWidthEst = winWidth <= 600 ? 150 : 210;
                 
-                let labelLeft = hoverLabel.x + 16;
-                if (labelLeft + labelWidthEst > winWidth - 16) {
-                    labelLeft = Math.max(12, hoverLabel.x - labelWidthEst - 12);
-                }
+                const isMobile = winWidth <= 810;
+                let labelLeft = isMobile ? hoverLabel.x - (labelWidthEst / 2) : hoverLabel.x + 16;
+                labelLeft = clamp(labelLeft, 12, winWidth - labelWidthEst - 12);
 
-                let labelTop = hoverLabel.y + 12;
-                if (labelTop + 45 > winHeight - 12) {
-                    labelTop = Math.max(12, hoverLabel.y - 45);
+                let labelTop = isMobile ? hoverLabel.y - 48 : hoverLabel.y + 12;
+                if (labelTop < 12) {
+                    labelTop = hoverLabel.y + 24;
                 }
 
                 return (
