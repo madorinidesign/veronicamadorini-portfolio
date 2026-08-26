@@ -411,14 +411,14 @@ a *, button *,
     cursor: pointer !important;
     user-select: none;
     touch-action: pan-y;
-    filter: drop-shadow(0px 10px 5px rgba(34, 34, 34, 0.25));
+    filter: drop-shadow(0px 10px 12px rgba(0, 0, 0, 0.45)) !important;
     will-change: transform;
 }
 .hero-image-6:active,
 .hero-image-6.is-dragging {
     cursor: grabbing !important;
     cursor: -webkit-grabbing !important;
-    filter: drop-shadow(0px 16px 12px rgba(0, 0, 0, 0.35)) !important;
+    filter: drop-shadow(0px 16px 16px rgba(0, 0, 0, 0.6)) !important;
 }
 
 /* Vinyl Player Widget Styles */
@@ -1887,7 +1887,7 @@ a *, button *,
     .hero-image-3 { width: clamp(56px, 14vw, 76px) !important; top: 380px; left: 27%; } 
     .hero-image-4 { width: clamp(56px, 14vw, 76px) !important; top: 420px; left: 50%; } 
     .hero-image-5 { width: clamp(56px, 14vw, 76px) !important; top: 360px; left: 76%; } 
-    .hero-image-6 { width: clamp(75px, 15vw, 110px) !important; top: 220px !important; left: 80%; } 
+    .hero-image-6 { width: clamp(75px, 15vw, 110px) !important; top: 220px !important; left: 80%; filter: drop-shadow(0px 10px 12px rgba(0, 0, 0, 0.45)) !important; } 
     .phrase-wrap { min-height: 100vh !important; min-height: 100svh !important; padding: 150px 14px 180px !important; background-color: var(--ink) !important; background-image: linear-gradient(180deg, var(--ink) 0%, var(--ink) 8%, var(--sage) 48%, var(--sage) 54%, var(--ink) 100%) !important; } 
     .about-panel { padding: 14px !important; border: none !important; }
     .phrase-panel { padding: 14px 14px 0 14px !important; overflow: hidden !important; border: none !important; }
