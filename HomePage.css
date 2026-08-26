@@ -4,14 +4,20 @@
     --sage: rgb(145, 158, 158);
 }
 
+*, *::before, *::after {
+    cursor: pointer !important;
+}
+
 html {
     scroll-behavior: auto;
     touch-action: pan-y pinch-zoom;
     overflow-x: hidden;
+    cursor: pointer !important;
 }
 
 html, body { 
     box-sizing: border-box; 
+    cursor: pointer !important;
 }
 
 body {
@@ -23,6 +29,7 @@ body {
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
     touch-action: pan-y pinch-zoom;
+    cursor: pointer !important;
 }
 
 .home-page { 
@@ -305,7 +312,7 @@ body {
     position: absolute; 
     width: 6.8vw;
     height: auto;
-    cursor: grab; 
+    cursor: pointer !important; 
     user-select: none; 
     touch-action: pan-y; 
     object-fit: contain; 
@@ -327,7 +334,7 @@ body {
 .hero-images img:active,
 .hero-images img.is-dragging,
 .hero-image-6.is-dragging { 
-    cursor: grabbing !important; 
+    cursor: pointer !important; 
     filter: drop-shadow(0px 16px 12px rgba(0, 0, 0, 0.35)) !important;
 }
 
@@ -577,8 +584,7 @@ body {
     height: 410px;
     perspective: 1200px;
     perspective-origin: 50% 50%;
-    cursor: grab !important;
-    cursor: -webkit-grab !important;
+    cursor: pointer !important;
     touch-action: pan-y;
     user-select: none;
     transform-style: preserve-3d;
@@ -588,8 +594,7 @@ body {
 }
 
 .stage.dragging, .stage.dragging * {
-    cursor: grabbing !important;
-    cursor: -webkit-grabbing !important;
+    cursor: pointer !important;
 }
 
 .card {
