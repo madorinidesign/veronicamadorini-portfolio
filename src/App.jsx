@@ -858,6 +858,7 @@ function MacbookScreenDisplay({ videoUrl, fallbackImg, title }) {
 }
 
 function IphoneScreenDisplay({ imgSrc, videoUrl, title }) {
+    const [videoAspect, setVideoAspect] = useState(null);
     const videoRef = useRef(null);
 
     useEffect(() => {
@@ -870,6 +871,13 @@ function IphoneScreenDisplay({ imgSrc, videoUrl, title }) {
             p.catch(() => {});
         }
     }, [videoUrl]);
+
+    const handleLoadedMetadata = (e) => {
+        const video = e.target;
+        if (video && video.videoWidth && video.videoHeight) {
+            setVideoAspect(video.videoWidth / video.videoHeight);
+        }
+    };
 
     return (
         <div className="iphone-display-wrapper">
@@ -884,7 +892,10 @@ function IphoneScreenDisplay({ imgSrc, videoUrl, title }) {
                         <div className="iphone-sensor-dot"></div>
                     </div>
                     
-                    <div className="iphone-screen-content">
+                    <div 
+                        className="iphone-screen-content"
+                        style={videoAspect ? { aspectRatio: `${videoAspect}` } : { aspectRatio: '888 / 1920' }}
+                    >
                         {videoUrl ? (
                             <video
                                 ref={videoRef}
@@ -895,6 +906,7 @@ function IphoneScreenDisplay({ imgSrc, videoUrl, title }) {
                                 playsInline
                                 disablePictureInPicture
                                 disableRemotePlayback
+                                onLoadedMetadata={handleLoadedMetadata}
                                 className="iphone-video-element"
                             />
                         ) : (
