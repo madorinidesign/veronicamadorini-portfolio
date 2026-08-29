@@ -1569,22 +1569,6 @@ export default function App() {
                             FIGMA AND PAPER HOLD THE FIRST SKETCH OF AN IDEA. FRAMER GIVES IT MOVEMENT — BUILT ALONGSIDE CLAUDE AND ANTIGRAVITY, WHICH I USE TO EXPLORE, RESEARCH AND ACCELERATE THE PROCESS, WHILE EVERY CREATIVE AND DESIGN DECISION REMAINS HUMAN. AND WHEN AN IMAGE EXISTS ONLY IN MY HEAD, HIGGSFIELD AND REVE HELP ME BRING IT INTO THE LIGHT.
                         </CharBlurText>
                     </p>
-
-                    <ul className="tool-pills" aria-label="Tools used">
-                        <li><CharBlurText>FIGMA</CharBlurText></li>
-                        <li className="tool-dot" aria-hidden="true"></li>
-                        <li><CharBlurText>PAPER</CharBlurText></li>
-                        <li className="tool-dot" aria-hidden="true"></li>
-                        <li><CharBlurText>FRAMER</CharBlurText></li>
-                        <li className="tool-dot" aria-hidden="true"></li>
-                        <li><CharBlurText>CLAUDE</CharBlurText></li>
-                        <li className="tool-dot" aria-hidden="true"></li>
-                        <li><CharBlurText>ANTIGRAVITY</CharBlurText></li>
-                        <li className="tool-dot" aria-hidden="true"></li>
-                        <li><CharBlurText>HIGGSFIELD AI</CharBlurText></li>
-                        <li className="tool-dot" aria-hidden="true"></li>
-                        <li><CharBlurText>REVE</CharBlurText></li>
-                    </ul>
                 </article>
 
                 <footer className="contact-footer" id="contact">
