@@ -1585,6 +1585,10 @@ a *, button *,
     color: rgba(217,217,200,.9); 
 }
 
+.about-panel p:last-child {
+    margin-bottom: 0 !important;
+}
+
 .tool-pills { 
     list-style: none; 
     margin: 28px 0 0; 
